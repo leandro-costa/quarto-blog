@@ -565,7 +565,7 @@ determinada classe ou interface, limitando a herança a um conjunto
 pré-definido de tipos, usando a palavra-chave `sealed` em conjunto com
 `permits`.
 
-```{java}
+```java
 sealed class ClasseSelada permits SubClasse1, SubClasse2 {
     public void metodo() {
         System.out.println("Método da classe selada");
@@ -578,13 +578,22 @@ final class SubClasse2 extends ClasseSelada {}
 new SubClasse1().metodo();
 ```
 
+::: {.callout-note}
+Este bloco não é executado automaticamente no build: o JShell (motor usado
+para rodar os exemplos `{java}` deste site) trata cada declaração de classe
+como uma unidade de compilação praticamente independente, e o recurso
+`sealed`/`permits` exige que a classe base e as subclasses permitidas
+estejam na mesma unidade de compilação — algo que só é garantido compilando
+o código a partir de arquivos `.java` reais (`javac`), e não em um REPL.
+:::
+
 ### Exemplo de classe selada aplicada
 
 Considerando um sistema onde formas de pagamento são definidas, podemos criar
 uma classe selada `FormaPagamento` que limita as subclasses a
 `CartaoCredito`, `Boleto` e `Pix`:
 
-```{java}
+```java
 sealed abstract class FormaPagamento permits CartaoCredito, Boleto, Pix {
     public abstract void processarPagamento(double valor);
 }
@@ -613,6 +622,11 @@ final class Pix extends FormaPagamento {
 FormaPagamento pagamento = new Pix();
 pagamento.processarPagamento(150.0);
 ```
+
+::: {.callout-note}
+Assim como no exemplo anterior, este bloco fica apenas destacado (não
+executado) pela mesma limitação do JShell com `sealed`/`permits`.
+:::
 
 Nessa situação, novas formas de pagamento sempre exigirão intervenção do
 desenvolvedor no código-fonte, já que não é possível criar uma nova forma de
