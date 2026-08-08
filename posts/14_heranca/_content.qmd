@@ -1,0 +1,647 @@
+
+A **herança** é um dos pilares da programação orientada a objetos e representa a
+capacidade de uma classe reutilizar a estrutura e o comportamento definidos em
+outra classe, chamada de **superclasse** ou **classe pai**. A classe que herda
+essas características é chamada de **subclasse** ou **classe filha**.
+
+Com a herança, uma subclasse passa a incorporar tudo o que a superclasse possui
+— atributos e métodos — podendo ainda acrescentar suas próprias características
+específicas. Esse mecanismo permite a criação de **classes genéricas** que
+reúnem um conjunto de definições comuns a diversos objetos (processo conhecido
+como **generalização**). A partir dessas classes genéricas, é possível
+desenvolver outras mais específicas, que complementam e estendem os
+comportamentos existentes (o que chamamos de **especialização**).
+
+Em Java, a herança é **simples**, ou seja, uma classe só pode herdar de uma
+única superclasse — **herança múltipla não é permitida**. O principal objetivo
+desse recurso é **especializar** uma classe, enriquecendo-a com novas
+funcionalidades sem a necessidade de reescrever código já existente.
+
+Enquanto a **especialização** permite que uma classe se torne mais detalhada e
+específica, a **generalização** atua no sentido oposto, tornando o modelo mais
+abstrato e amplo, adequado a um número maior de situações.
+
+::: {.callout-tip title="Tips"}
+- É a capacidade de uma classe definir o seu comportamento e sua estrutura
+  aproveitando definições de outra classe, normalmente conhecida como classe
+  base ou classe pai.
+  - As subclasses herdam tudo o que a classe pai possui e acrescentam as suas
+    características particulares.
+  - Através do mecanismo de herança é possível definirmos classes genéricas
+    que agreguem um conjunto de definições comuns a um grande número de
+    objetos (Generalização).
+  - A partir dessas especializações genéricas podemos construir novas
+    classes, mais específicas, que acrescentem novas características e
+    comportamentos aos já existentes (Especialização).
+- Capacidade que uma classe tem de herdar as características e comportamentos
+  de outra classe.
+- Classe pai é chamada de superclasse e a filha de subclasse.
+- Em Java só é permitido herdar de uma única classe, ou seja, não permite
+  herança múltipla.
+- O objetivo da herança é especializar o entendimento de uma classe criando
+  novas características e comportamentos que vão além da superclasse.
+- Ao mesmo tempo que a especialização amplia o entendimento de uma classe, a
+  generalização vai no sentido inverso e define um modelo menos especializado
+  e mais genérico.
+:::
+
+```{java}
+public class Mamifero {
+    private int altura;
+    private double peso;
+    public void mamar() {
+        System.out.println("Mamifero mamando");
+    }
+}
+```
+
+```{java}
+public class Morcego extends Mamifero {
+    private double tamanhoPresa;
+    public void voar() {
+        System.out.println("Morcego voando");
+    }
+}
+```
+
+- Classe Morcego
+  - Quais as características de morcego?
+    - altura
+    - peso
+    - tamanhoPresa
+  - Quais ações o morcego pode fazer?
+    - mamar
+    - voar
+- Se usarmos os princípios de lógica podemos dizer que todo morcego é
+  mamífero porém NÃO podemos afirmar que todo mamífero é morcego.
+
+```{java}
+//| error: true
+Mamifero animalMamifero = new Morcego();
+Morcego batman = new Mamifero(); // erro de compilação — mostrado de propósito
+```
+
+- Com base no que foi dito até aqui podemos deduzir que o item 2 deve causar
+  um erro já que não é possível garantir que todo mamífero seja um morcego.
+- Já o item 1 pode parecer estranho, pois a variável é do tipo `Mamifero` e o
+  objeto para o qual a variável se refere é do tipo `Morcego`.
+  - Devemos saber que toda variável pode receber um objeto que seja
+    compatível com o seu tipo e, neste caso, todo `Morcego` CERTAMENTE **é
+    um** `Mamifero`.
+
+```{java}
+Mamifero animalMamifero = new Morcego();
+animalMamifero.mamar();
+```
+
+- Todo `Morcego` **é um** `Mamifero`, porém não pode realizar todas as ações
+  de um `Morcego` diretamente pela variável `animalMamifero`.
+- Para o `Morcego` `voar`, é necessário criar uma nova variável do tipo
+  `Morcego` e atribuir o objeto que estava na variável `animalMamifero`.
+
+```{java}
+Mamifero animalMamifero = new Morcego();
+animalMamifero.mamar();
+Morcego batman = (Morcego) animalMamifero;
+batman.voar();
+```
+
+- Este tipo de operação recebe o nome de **TYPE CAST**.
+
+## Outros exemplos
+
+### Caelum
+
+Como toda empresa, nosso Banco possui funcionários. Vamos modelar a classe
+`Funcionario`:
+
+```java
+class Funcionario {
+    private String nome;
+    private String cpf;
+    private double salario;
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCpf(String cpf) {
+        // regras de validação do cpf
+        this.cpf = cpf;
+    }
+}
+```
+
+Além de um funcionário comum, há também outros cargos, como os gerentes. Os
+gerentes guardam a mesma informação que um funcionário comum, mas possuem
+outras informações, além de ter funcionalidades um pouco diferentes. Um
+gerente no nosso banco possui também uma senha numérica que permite o acesso
+ao sistema interno do banco, além do número de funcionários que ele
+gerencia:
+
+```java
+class Gerente {
+    private String nome;
+    private String cpf;
+    private double salario;
+    private int senha;
+    private int numeroDeFuncionariosGerenciados;
+
+    public boolean autentica(int senha) {
+        if (this.senha == senha) {
+            System.out.println("Acesso Permitido!");
+            return true;
+        } else {
+            System.out.println("Acesso Negado!");
+            return false;
+        }
+    }
+}
+```
+
+**Precisamos mesmo de outra classe?** Poderíamos ter deixado a classe
+`Funcionario` mais genérica, mantendo nela a senha de acesso e o número de
+funcionários gerenciados, deixando esses atributos vazios quando o funcionário
+não fosse gerente. Isso geraria muitos atributos opcionais e métodos sem
+sentido (como `autentica`) para quem não é gerente — além de exigir cópia de
+código sempre que surgir um novo tipo de funcionário, e alteração em todas as
+classes sempre que um atributo novo precisar ser adicionado a todos os
+funcionários.
+
+Existe um jeito, em Java, de relacionar uma classe de tal maneira que uma
+delas **herda** tudo que a outra tem — uma relação de classe mãe e classe
+filha. No nosso caso, gostaríamos que `Gerente` fosse uma **extensão** de
+`Funcionario`. Fazemos isso através da palavra-chave `extends`.
+
+```{java}
+class Funcionario {
+    protected String nome;
+    protected String cpf;
+    protected double salario;
+}
+
+class Gerente extends Funcionario {
+    private int senha;
+    private int numeroDeFuncionariosGerenciados;
+
+    public boolean autentica(int senha) {
+        if (this.senha == senha) {
+            System.out.println("Acesso Permitido!");
+            return true;
+        } else {
+            System.out.println("Acesso Negado!");
+            return false;
+        }
+    }
+
+    public void setSenha(int senha) {
+        this.senha = senha;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}
+
+Gerente gerente = new Gerente();
+gerente.setNome("João da Silva");
+gerente.setSenha(4231);
+gerente.autentica(4231);
+```
+
+Em todo momento que criarmos um objeto do tipo `Gerente`, este objeto
+possuirá também os atributos definidos na classe `Funcionario`, pois um
+`Gerente` **é um** `Funcionario`.
+
+Dizemos que a classe `Gerente` **herda** todos os atributos e métodos da
+classe mãe, no nosso caso, `Funcionario`. Para ser mais preciso, ela também
+herda os atributos e métodos privados, porém não consegue acessá-los
+diretamente. Para acessar um membro privado na filha indiretamente, seria
+necessário que a mãe expusesse um outro método visível que invocasse esse
+atributo ou método privado.
+
+::: {.callout-note title="Super e Sub classe"}
+A nomenclatura mais encontrada é que `Funcionario` é a superclasse de
+`Gerente`, e `Gerente` é a subclasse de `Funcionario`. Dizemos também que todo
+`Gerente` **é um** `Funcionario`. Outra forma é dizer que `Funcionario` é
+classe mãe de `Gerente` e `Gerente` é classe filha de `Funcionario`.
+:::
+
+E se precisamos acessar os atributos que herdamos? Não gostaríamos de deixar
+os atributos de `Funcionario` **public**, pois dessa maneira qualquer um
+poderia alterar os atributos dos objetos deste tipo. Existe outro modificador
+de acesso, o **protected**, que fica entre o **private** e o **public**. Um
+atributo **protected** só pode ser acessado (visível) pela própria classe e
+por suas subclasses e classes que estejam no mesmo pacote.
+
+::: {.callout-warning title="Sempre usar protected?"}
+Então por que usar `private`? Depois de um tempo programando orientado a
+objetos, você vai começar a sentir que nem sempre é uma boa ideia deixar que
+a classe filha acesse os atributos da classe mãe, pois isso quebra um pouco
+a ideia de que só aquela classe deveria manipular seus atributos. Essa é uma
+discussão um pouco mais avançada. Além disso, não só as subclasses, mas
+também outras classes do mesmo pacote podem acessar os atributos
+`protected`.
+:::
+
+Da mesma maneira, podemos ter uma classe `Diretor` que estenda `Gerente` e a
+classe `Engenheiro` pode estender diretamente de `Funcionario`. Fique claro
+que essa é uma decisão de negócio: se `Diretor` vai estender de `Gerente` ou
+não vai depender se, para você, `Diretor` **é um** `Gerente`. Uma classe pode
+ter várias filhas, mas pode ter apenas uma mãe — a chamada **herança simples**
+do Java.
+
+### K19
+
+#### Reutilização de Código
+
+Um banco oferece diversos serviços que podem ser contratados individualmente
+pelos clientes. Quando um serviço é contratado, o sistema do banco deve
+registrar quem foi o cliente que contratou o serviço, quem foi o funcionário
+responsável pelo atendimento e a data de contratação.
+
+Com o intuito de ser produtivo, a modelagem dos serviços do banco deve
+diminuir a repetição de código. A ideia é reaproveitar o máximo do código já
+criado, seguindo o princípio **Don't Repeat Yourself (DRY)**.
+
+**Uma classe para todos os serviços.** Poderíamos definir apenas uma classe
+para modelar todos os tipos de serviços que o banco oferece — mas, à medida
+que novos serviços surgem (empréstimo, seguro de veículo etc.), a classe
+acumula cada vez mais atributos opcionais e métodos que só fazem sentido para
+alguns objetos, gerando confusão e desperdício de memória.
+
+**Uma classe para cada serviço.** Criar uma classe totalmente independente
+para cada serviço resolve o problema anterior, mas reintroduz duplicação de
+código (contrariando o DRY): qualquer alteração comum a todos os serviços
+precisa ser replicada em cada classe.
+
+**Uma classe genérica e várias específicas.** Aplicando herança, criamos uma
+classe `Servico` com os atributos/métodos comuns a todos os serviços, e uma
+classe específica para cada serviço, que estende `Servico`:
+
+```{java}
+import java.time.LocalDate;
+
+class Servico {
+    protected LocalDate dataDeContratacao;
+
+    public void setDataDeContratacao(LocalDate data) {
+        this.dataDeContratacao = data;
+    }
+}
+
+class Emprestimo extends Servico {
+    private double valor;
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+}
+
+class SeguroDeVeiculo extends Servico {
+    private double valorDoSeguroDeVeiculo;
+}
+
+Emprestimo e = new Emprestimo();
+e.setDataDeContratacao(LocalDate.of(2026, java.time.Month.JANUARY, 8));
+e.setValor(10000);
+System.out.println("Empréstimo de R$ " + e.getValor() + " contratado em " + e.dataDeContratacao);
+```
+
+Os objetos das classes específicas `Emprestimo` e `SeguroDeVeiculo` possuem
+tanto os atributos e métodos definidos nessas classes quanto os definidos em
+`Servico`. A classe genérica é denominada **superclasse**, **classe base** ou
+**classe mãe**; as classes específicas são denominadas **subclasses**,
+**classes derivadas** ou **classes filhas**.
+
+## Sobrescrita de Métodos
+
+### Caelum
+
+Todo fim de ano, os funcionários do nosso banco recebem uma bonificação. Os
+funcionários comuns recebem 10% do valor do salário, e os gerentes, 15%.
+
+```{java}
+class Funcionario {
+    protected double salario;
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public double getBonificacao() {
+        return this.salario * 0.10;
+    }
+}
+
+class Gerente extends Funcionario {
+    @Override
+    public double getBonificacao() {
+        return this.salario * 0.15;
+    }
+}
+
+Gerente gerente = new Gerente();
+gerente.setSalario(5000.0);
+System.out.println(gerente.getBonificacao());
+```
+
+No Java, quando herdamos um método, podemos alterar seu comportamento —
+podemos **reescrever** (sobrescrever, *override*) esse método. Assim, o
+resultado correto passa a ser `750.0`, e não `500.0` como seria herdando o
+método sem reescrevê-lo.
+
+::: {.callout-note title="A anotação Override"}
+Há como deixar explícito no seu código que determinado método é a reescrita
+de um método da sua classe mãe. Fazemos isso colocando `@Override` acima do
+método. Por questões de compatibilidade, isso não é obrigatório — mas, se um
+método estiver anotado com `@Override`, ele necessariamente precisa estar
+reescrevendo um método da classe mãe (senão o compilador acusa erro).
+:::
+
+#### Invocando o método reescrito
+
+Depois de reescrito, não podemos mais chamar diretamente o método antigo
+herdado da classe mãe — mas podemos invocá-lo de dentro da classe usando a
+palavra-chave `super`:
+
+```{java}
+class Funcionario {
+    protected double salario;
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public double getBonificacao() {
+        return this.salario * 0.10;
+    }
+}
+
+class Gerente extends Funcionario {
+    @Override
+    public double getBonificacao() {
+        return super.getBonificacao() + 1000;
+    }
+}
+
+Gerente gerente = new Gerente();
+gerente.setSalario(5000.0);
+System.out.println(gerente.getBonificacao());
+```
+
+Essa invocação vai procurar o método `getBonificacao` na superclasse de
+`Gerente`. Essa é uma prática comum, pois em muitos casos o método reescrito
+faz "algo a mais" que o método da classe mãe.
+
+### K19
+
+Suponha que a taxa administrativa do serviço de empréstimo é calculada de
+forma diferente dos outros serviços, a partir do valor emprestado. Os
+métodos das classes específicas têm prioridade sobre os métodos das classes
+genéricas: se o método chamado existe na classe filha, ele será chamado;
+caso contrário, o método será procurado na classe mãe. Quando definimos um
+método com a mesma assinatura na classe base e em alguma classe derivada,
+estamos aplicando o conceito de **Reescrita de Método**.
+
+Suponha ainda que o preço de um serviço seja a soma de um valor fixo mais um
+valor que depende do tipo do serviço. Podemos manter o valor fixo comum na
+classe `Servico` e reescrever `calculaTaxa()` em cada classe específica,
+reaproveitando o cálculo comum via `super`:
+
+```{java}
+class Servico {
+    public double calculaTaxa() {
+        return 5;
+    }
+}
+
+class Emprestimo extends Servico {
+    private double valor = 1000;
+
+    @Override
+    public double calculaTaxa() {
+        return super.calculaTaxa() + this.valor * 0.1;
+    }
+}
+
+Emprestimo e = new Emprestimo();
+System.out.println(e.calculaTaxa());
+```
+
+Dessa forma, quando o valor padrão do preço dos serviços é alterado, basta
+modificar o método na classe `Servico`.
+
+## Construtores e Herança
+
+### Construtor Padrão
+
+Em Java, toda classe herda implicitamente da classe `Object`, que é a
+superclasse raiz de todas as classes. A classe `Object` possui um
+**construtor padrão** (sem parâmetros), chamado automaticamente se nenhuma
+outra chamada ao construtor da superclasse for especificada.
+
+Quando temos uma hierarquia de classes, as chamadas dos construtores são mais
+complexas do que o normal: pelo menos um construtor de cada classe da mesma
+sequência hierárquica deve ser chamado ao instanciar um objeto, e os
+construtores das classes mais genéricas são chamados **antes** dos
+construtores das classes específicas.
+
+```{java}
+class Servico {
+    public Servico() {
+        System.out.println("Servico");
+    }
+}
+
+class Emprestimo extends Servico {
+    public Emprestimo() {
+        System.out.println("Emprestimo");
+    }
+}
+
+new Emprestimo();
+```
+
+### Construtores com Parâmetros
+
+Construtores com parâmetros são utilizados para inicializar os atributos de
+um objeto no momento da criação. Se uma classe filha definir um construtor,
+ela deve chamar explicitamente o construtor da superclasse usando `super()`
+para garantir que a inicialização da classe base ocorra corretamente.
+
+```{java}
+class Pessoa {
+    String nome;
+
+    public Pessoa(String nome) {
+        this.nome = nome;
+        System.out.println("Construtor da classe Pessoa chamado!");
+    }
+}
+
+class Aluno extends Pessoa {
+    int matricula;
+
+    public Aluno(String nome, int matricula) {
+        super(nome); // Chama o construtor da classe Pai (Pessoa)
+        this.matricula = matricula;
+        System.out.println("Construtor da classe Aluno chamado!");
+    }
+}
+
+Aluno aluno = new Aluno("Carlos", 12345);
+```
+
+**Por que a classe filha deve chamar `super()`?**
+
+1. **Inicialização correta da superclasse** — a parte referente a `Pessoa`
+   precisa ser inicializada antes que os atributos específicos de `Aluno`
+   sejam definidos.
+2. **Garantia de consistência** — se `Pessoa` possui lógica importante no seu
+   construtor (validação, inicialização de recursos), essa lógica precisa
+   rodar antes do objeto `Aluno` ser utilizado.
+3. **Evita erros de compilação** — se a classe pai não tiver um construtor
+   sem parâmetros e a classe filha não chamar explicitamente `super(args)`,
+   o código não compila.
+
+Se `Pessoa` não tivesse um construtor sem parâmetros, este código geraria
+erro de compilação (`super()` implícito não encontraria construtor
+compatível):
+
+```java
+class Aluno extends Pessoa {
+    int matricula;
+
+    // Erro: Pessoa(String) deve ser chamado explicitamente
+    public Aluno(int matricula) {
+        this.matricula = matricula;
+    }
+}
+```
+
+> **Erro de compilação:** *"Constructor Pessoa in class Pessoa cannot be
+> applied to given types"*
+
+## Proibindo Herança
+
+Para proibir que uma classe seja estendida, usamos o modificador `final`.
+Quando uma classe é declarada como `final`, ela não pode ser estendida por
+outras classes.
+
+```java
+final class ClasseFinal {
+    public void metodo() {
+        System.out.println("Método da classe final");
+    }
+}
+
+// Isso causará um erro de compilação:
+class SubClasse extends ClasseFinal {
+    public void metodo() {
+        System.out.println("Método da subclasse");
+    }
+}
+```
+
+## Limitando Herança
+
+Classes seladas são um recurso presente em várias linguagens orientadas a
+objetos modernas (Java, Kotlin, C#, entre outras). Elas permitem que o
+desenvolvedor controle explicitamente quais subclasses podem estender uma
+determinada classe ou interface, limitando a herança a um conjunto
+pré-definido de tipos, usando a palavra-chave `sealed` em conjunto com
+`permits`.
+
+```java
+sealed class ClasseSelada permits SubClasse1, SubClasse2 {
+    public void metodo() {
+        System.out.println("Método da classe selada");
+    }
+}
+
+final class SubClasse1 extends ClasseSelada {}
+final class SubClasse2 extends ClasseSelada {}
+
+new SubClasse1().metodo();
+```
+
+::: {.callout-note}
+Este bloco não é executado automaticamente no build: o JShell (motor usado
+para rodar os exemplos `{java}` deste site) trata cada declaração de classe
+como uma unidade de compilação praticamente independente, e o recurso
+`sealed`/`permits` exige que a classe base e as subclasses permitidas
+estejam na mesma unidade de compilação — algo que só é garantido compilando
+o código a partir de arquivos `.java` reais (`javac`), e não em um REPL.
+:::
+
+### Exemplo de classe selada aplicada
+
+Considerando um sistema onde formas de pagamento são definidas, podemos criar
+uma classe selada `FormaPagamento` que limita as subclasses a
+`CartaoCredito`, `Boleto` e `Pix`:
+
+```java
+sealed abstract class FormaPagamento permits CartaoCredito, Boleto, Pix {
+    public abstract void processarPagamento(double valor);
+}
+
+final class CartaoCredito extends FormaPagamento {
+    @Override
+    public void processarPagamento(double valor) {
+        System.out.println("Processando pagamento de " + valor + " via Cartão de Crédito");
+    }
+}
+
+final class Boleto extends FormaPagamento {
+    @Override
+    public void processarPagamento(double valor) {
+        System.out.println("Processando pagamento de " + valor + " via Boleto");
+    }
+}
+
+final class Pix extends FormaPagamento {
+    @Override
+    public void processarPagamento(double valor) {
+        System.out.println("Processando pagamento de " + valor + " via Pix");
+    }
+}
+
+FormaPagamento pagamento = new Pix();
+pagamento.processarPagamento(150.0);
+```
+
+::: {.callout-note}
+Assim como no exemplo anterior, este bloco fica apenas destacado (não
+executado) pela mesma limitação do JShell com `sealed`/`permits`.
+:::
+
+Nessa situação, novas formas de pagamento sempre exigirão intervenção do
+desenvolvedor no código-fonte, já que não é possível criar uma nova forma de
+pagamento apenas cadastrando algo em tempo de execução — isso é intencional
+e faz parte do controle que `sealed`/`permits` oferece.
+
+**Pontos positivos:** encapsulamento reforçado, menor acoplamento com o mundo
+externo, facilita manutenção e refatoração, melhora *type safety* e
+*pattern matching*, expressa melhor a intenção de design, permite
+otimizações de desempenho.
+
+**Pontos negativos:** flexibilidade reduzida, aumento do acoplamento interno
+na hierarquia, risco de *overengineering*, pode dificultar depuração/mocking,
+pode conflitar com padrões de projeto tradicionais baseados em extensão
+externa.
+
+**Boas práticas:** use classes seladas em hierarquias fechadas e bem
+conhecidas; evite selar prematuramente; documente o motivo da restrição;
+para desacoplamento e extensão, prefira interfaces não-seladas e composição
+sobre herança rígida quando fizer sentido.
+
+## Referências
+
+O conteúdo desta aula tem como base @takenami2011, @caelum2015 e @k192013,
+além de material complementar sobre classes seladas em Java, Kotlin e C#
+reunido pelo professor da disciplina.

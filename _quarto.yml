@@ -40,6 +40,8 @@ website:
   page-footer:
     center: "Material de aula IFBA SAJ · Copyright © 2026 Leandro Souza"
 
+bibliography: references.bib
+
 format:
   html:
     theme:

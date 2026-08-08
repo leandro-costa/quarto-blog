@@ -2,9 +2,11 @@ project:
   type: book
   output-dir: _book
 
+lang: pt-BR
+
 book:
-  title: "Programação Orientada a Objetos"
-  subtitle: "Material de Aulas — Turma 2026.1 ADS"
+  title: "Material de Aulas — Turma 2026.1 ADS"
+  subtitle: "Programação Orientada a Objetos"
   author: "Leandro Souza"
   date: today
   date-format: "DD/MM/YYYY"
@@ -14,6 +16,9 @@ book:
     - part: "Exercícios"
       chapters:
         - exercicio-21-generics.qmd
+    - referencias.qmd
+
+bibliography: ../references.bib
 
 format:
   typst:
@@ -25,6 +30,16 @@ format:
     margin:
       x: 2.5cm
       y: 2.5cm
+    include-in-header:
+      text: |
+        // Corrige a numeração dos títulos (2.1, 2.1.1 etc.) para ficar
+        // alinhada com a margem do texto, em vez de "pendurada" mais
+        // próxima da borda da página.
+        #set par(hanging-indent: 0pt)
+        #show heading: it => {
+          set par(hanging-indent: 0pt)
+          block(it, above: 1.6em, below: 1em)
+        }
 
 execute:
   freeze: auto

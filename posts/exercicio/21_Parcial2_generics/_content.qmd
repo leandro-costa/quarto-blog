@@ -1,0 +1,346 @@
+
+## Comunicação entre camadas com *Abstract*, *Interface* e *Generic*
+
+Atualize a sua camada de modelo para utilizar uma definição abstrata. Essa
+definição deverá ter características e comportamentos comuns a todos os
+models do sistema, tais como ter um identificador único, identificação do
+momento de inserção da informação, momento da última atualização, usuário que
+cadastrou e atualizou, dentre outros.
+
+Inspiração para classe abstrata da camada de modelo:
+
+```{java}
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+public abstract class AbstractModel<T> {
+    private T id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public T getId() {
+        return id;
+    }
+
+    public void setId(T id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        AbstractModel<?> outro = (AbstractModel<?>) o;
+        return Objects.equals(id, outro.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{id=" + id + "}";
+    }
+}
+```
+
+Todas as classes da camada de modelo devem herdar esse modelo abstrato.
+
+Exemplo de subclasse:
+
+```{java}
+import java.util.UUID;
+
+public class Usuario extends AbstractModel<UUID> {
+    private String nome;
+    private String email;
+
+    public Usuario(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{id=" + getId()
+            + ", nome='" + nome + '\''
+            + ", email='" + email + '\'' + '}';
+    }
+}
+
+Usuario u = new Usuario("Ada Lovelace", "ada@exemplo.com");
+System.out.println(u);
+```
+
+Definir, usando interfaces + generics, os contratos de comunicação entre as
+camadas de Apresentação, Negócio e Dados. A camada de Apresentação deve
+depender somente de interfaces, nunca de classes concretas.
+
+## Interface genérica de serviço (Camada de Negócio)
+
+Contrato da comunicação Apresentação → Negócio, espelhando o `GenericDAO`:
+
+```java
+import java.util.List;
+
+public interface GenericService<T extends AbstractModel<ID>, ID> {
+    ID salvar(T entidade) throws RegraDeNegocioException;
+    void atualizar(T entidade) throws RegraDeNegocioException;
+    T buscarPorId(ID id);
+    void deletar(ID id);
+    List<T> buscarTodos();
+    void validar(T entidade) throws RegraDeNegocioException;
+}
+```
+
+## Implementação genérica (injeção do DAO pela interface)
+
+A comunicação Negócio → Dados acontece pela interface `GenericDAO`, passada
+no construtor:
+
+```java
+import java.util.List;
+
+public abstract class GenericServiceImpl<T extends AbstractModel<ID>, ID>
+        implements GenericService<T, ID> {
+
+    private final GenericDAO<T, ID> dao;
+
+    public GenericServiceImpl(GenericDAO<T, ID> dao) {
+        this.dao = dao;
+    }
+
+    @Override
+    public ID salvar(T entidade) throws RegraDeNegocioException {
+        validar(entidade);
+        return dao.salvar(entidade);
+    }
+
+    @Override
+    public void atualizar(T entidade) throws RegraDeNegocioException {
+        validar(entidade);
+        dao.atualizar(entidade);
+    }
+
+    @Override
+    public T buscarPorId(ID id) { return dao.buscarPorId(id); }
+
+    @Override
+    public void deletar(ID id) { dao.deletar(id); }
+
+    @Override
+    public List<T> buscarTodos() { return dao.buscarTodos(); }
+}
+```
+
+### Serviço específico com regras
+
+```java
+public class UsuarioService extends GenericServiceImpl<Usuario, Long> {
+    public UsuarioService() {
+        super(new UsuarioDAO());
+    }
+
+    @Override
+    public void validar(Usuario usuario) throws RegraDeNegocioException {
+        if (usuario.getNome() == null || usuario.getNome().isBlank()) {
+            throw new RegraDeNegocioException("Nome do usuário é obrigatório");
+        }
+        boolean emailDuplicado = buscarTodos().stream()
+                .anyMatch(u -> u.getEmail().equals(usuario.getEmail()));
+        if (emailDuplicado) {
+            throw new RegraDeNegocioException("E-mail já cadastrado");
+        }
+    }
+}
+```
+
+## Apresentação depende só das interfaces
+
+```java
+public class UsuarioController {
+    private final GenericService<Usuario, UUID> usuarioService;
+
+    public UsuarioController() {
+        this.usuarioService = new UsuarioService();
+    }
+
+    public void cadastrar(String nome, String email) {
+        try {
+            Long id = usuarioService.salvar(new Usuario(nome, email));
+            exibirMensagem("Usuário salvo com id " + id);
+        } catch (RegraDeNegocioException e) {
+            exibirErro(e.getMessage());
+        }
+    }
+}
+```
+
+![Relação entre a camada de modelo e a camada de serviço](https://www.plantuml.com/plantuml/svg/bPBTYW8n38Nl-nIvr7UGPRoI1HSM71yWjb42dLRIp20i--vscBfA7OMzwj_vpab2cwGesdVUcEPlYuUaWbR1Uam9rkNu5HtvLVlnOw05TkRNc4cmJpqAHw2BKd0ri8tXD38x5Gud2B6ZE_ejqVNwJvI3aXpH4kn81hPnAYfVGq8_e2nQeA3iqD7Im256JnXW8E4Zs-ev-rNzRYXafPsywRCxZqq3vvMwpAKtgVqqYUMzmQAjHpIJKIIZvtF5D_vbG3t8cO0YcG-uyOy1JNOQ_qDPhm00)
+
+Defina um conjunto de comportamentos para fazer a inserção (*create*),
+consulta por `id` (*read*), alteração (*update*) e exclusão (*delete*) de
+qualquer classe da camada de modelo. Essas são as operações **CRUD**.
+
+```{java}
+import java.util.List;
+
+public interface GenericDAO<T extends AbstractModel<ID>, ID> {
+    ID salvar(T entidade);
+    void atualizar(T entidade);
+    T buscarPorId(ID id);
+    void deletar(ID id);
+    List<T> buscarTodos();
+}
+```
+
+Defina o DAO genérico para atender ao conjunto de operações CRUD:
+
+```{java}
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GenericDAOImpl<T extends AbstractModel<ID>, ID> implements GenericDAO<T, ID> {
+    private Map<ID, T> bancoDeDados = new HashMap<>();
+    private final Class<ID> tipoIdClass;
+
+    public GenericDAOImpl(Class<ID> tipoIdClass) {
+        this.tipoIdClass = tipoIdClass;
+    }
+
+    @Override
+    public ID salvar(T entidade) {
+        ID novoId = IdGenerator.gerarNovoId(tipoIdClass);
+        entidade.setId(novoId);
+        entidade.setCreatedAt(LocalDateTime.now());
+        bancoDeDados.put(entidade.getId(), entidade);
+        return novoId;
+    }
+
+    @Override
+    public void atualizar(T entidade) {
+        if (!bancoDeDados.containsKey(entidade.getId())) {
+            throw new IllegalArgumentException(
+                "Entidade não encontrada com o id " + entidade.getId());
+        }
+        entidade.setUpdatedAt(LocalDateTime.now());
+        bancoDeDados.put(entidade.getId(), entidade);
+    }
+
+    @Override
+    public T buscarPorId(ID id) {
+        return bancoDeDados.get(id);
+    }
+
+    @Override
+    public void deletar(ID id) {
+        bancoDeDados.remove(id);
+    }
+
+    @Override
+    public List<T> buscarTodos() {
+        return new ArrayList<>(bancoDeDados.values());
+    }
+}
+```
+
+Criando uma classe filha do DAO genérico para acrescentar funcionalidades
+específicas para a classe `Usuario`:
+
+```java
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+public class UsuarioDAO extends GenericDAOImpl<Usuario, UUID> {
+    public UsuarioDAO() {
+        super(UUID.class);
+    }
+
+    public List<Usuario> buscarOrdenadosPorNome() {
+        return buscarTodos()
+                .stream()
+                .sorted(Comparator.comparing(Usuario::getNome))
+                .collect(Collectors.toList());
+    }
+}
+```
+
+```{java}
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+import java.lang.reflect.Constructor;
+
+public class IdGenerator {
+
+    private static final AtomicLong contador = new AtomicLong(0);
+
+    @SuppressWarnings("unchecked")
+    public static <T> T gerarNovoId(Class<T> tipoClasse) {
+        if (Number.class.isAssignableFrom(tipoClasse)) {
+            try {
+                Constructor<T> construtor = tipoClasse.getConstructor(long.class);
+                return construtor.newInstance(contador.incrementAndGet());
+            } catch (Exception e) {
+                throw new RuntimeException(
+                    "Falha ao gerar ID para o tipo: " + tipoClasse.getSimpleName(), e);
+            }
+        } else if (tipoClasse == UUID.class) {
+            return (T) UUID.randomUUID();
+        }
+        throw new IllegalArgumentException(
+            "Tipo de ID não suportado: " + tipoClasse.getSimpleName());
+    }
+}
+
+System.out.println(IdGenerator.gerarNovoId(UUID.class));
+```
+
+## Entregar
+
+Entregar a camada de modelo atualizada, bem como a comunicação entre o
+Controller, Serviço e DAO.
+
+::: {.callout-important title="Entrega"}
+Link de entrega no GitHub Classroom: consultar o link enviado na turma.
+:::
