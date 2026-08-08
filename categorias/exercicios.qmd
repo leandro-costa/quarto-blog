@@ -6,7 +6,7 @@ listing:
   sort: "date desc"
   categories: false
   include:
-    categories: "exercicios"
+    categories: "exercicio"
 page-layout: full
 title-block-banner: false
 ---

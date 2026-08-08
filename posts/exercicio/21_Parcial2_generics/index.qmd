@@ -2,7 +2,7 @@
 title: "Exercício Generics - Trabalho Parcial 2"
 author: "Leandro Souza"
 date: "2026-08-03"
-categories: [trabalho, exercicios, entrega, heranca, generics]
+categories: [trabalho, exercicio, entrega, heranca, generics]
 description: "Comunicação entre camadas com Abstract, Interface e Generics"
 ---
 
