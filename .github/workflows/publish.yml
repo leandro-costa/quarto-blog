@@ -1,0 +1,68 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Instalar Python/Jupyter
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Jupyter e kernel IJava
+        run: |
+          pip install jupyter
+          curl -L https://github.com/SpencerPark/IJava/releases/latest/download/ijava-1.3.0.zip -o ijava.zip
+          unzip -q ijava.zip -d ijava
+          python3 ijava/install.py --sys-prefix
+
+      - name: Instalar Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render do site (blog)
+        run: quarto render .
+
+      - name: Render do livro (PDF via Typst)
+        run: quarto render livro --to typst
+
+      - name: Copiar PDF do livro para dentro do site
+        run: cp livro/_book/*.pdf _site/livro-poo.pdf
+
+      - name: Upload artefato do Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

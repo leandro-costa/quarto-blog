@@ -1,0 +1,12 @@
+---
+title: "Para Entrega"
+listing:
+  contents: ../posts
+  type: default
+  sort: "date desc"
+  categories: false
+  include:
+    categories: "entrega"
+page-layout: full
+title-block-banner: false
+---

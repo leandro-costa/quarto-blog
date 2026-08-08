@@ -1,0 +1,55 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "2026.1 ADS POO"
+  description: "Material das Aulas"
+  site-url: "https://20261-ifba-saj-ads-poo.github.io/blog-quarto/"
+  favicon: logo.svg
+  repo-url: https://github.com/20261-ifba-saj-ads-poo/blog-quarto
+  page-navigation: true
+
+  navbar:
+    background: primary
+    logo: logo.svg
+    left:
+      - href: index.qmd
+        text: Blog
+      - href: categorias/aulas.qmd
+        text: Aulas
+      - href: categorias/exercicios.qmd
+        text: Exercícios
+      - href: categorias/trabalhos.qmd
+        text: Trabalho
+      - href: categorias/entregas.qmd
+        text: "Para Entrega"
+    right:
+      - href: about.qmd
+        text: Sobre
+      - icon: github
+        href: https://github.com/20261-ifba-saj-ads-poo/blog-quarto
+
+  sidebar:
+    style: "docked"
+    contents: auto
+
+  page-footer:
+    center: "Material de aula IFBA SAJ · Copyright © 2026 Leandro Souza"
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+      dark: [darkly, styles.scss]
+    css: styles.css
+    toc: true
+    code-copy: true
+    code-tools: true
+    highlight-style: github
+
+execute:
+  freeze: auto    # não reexecuta código de posts antigos que não mudaram
+  echo: true
+
+editor: source

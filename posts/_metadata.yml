@@ -1,0 +1,6 @@
+engine: jupyter
+jupyter: java
+execute:
+  freeze: auto
+  cache: true
+  warning: false

@@ -1,0 +1,21 @@
+/*-- scss:defaults --*/
+$primary: #46bd87;   // mesma cor de destaque (theme-color) do site VuePress/Hope original
+$body-font-size-root: 16px;
+$code-block-font-size: 0.85em;
+
+/*-- scss:rules --*/
+.navbar {
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+.listing-item img {
+  border-radius: 8px;
+}
+
+.sidebar-title {
+  font-weight: 600;
+}
+
+pre.sourceCode {
+  border-radius: 6px;
+}

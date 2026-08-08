@@ -1,0 +1,12 @@
+---
+title: "Trabalho"
+listing:
+  contents: ../posts
+  type: default
+  sort: "date desc"
+  categories: false
+  include:
+    categories: "trabalho"
+page-layout: full
+title-block-banner: false
+---

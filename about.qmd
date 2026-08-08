@@ -1,0 +1,17 @@
+---
+title: "Leandro Souza"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/leandro-costa
+    - icon: envelope
+      text: E-mail
+      href: mailto:leandro.costa@ifba.edu.br
+---
+
+Professor EBTT · IFBA Campus Santo Antônio de Jesus.
+
+Material de aula da disciplina de Programação Orientada a Objetos (ADS), turma 2026.1.

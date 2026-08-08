@@ -1,0 +1,12 @@
+---
+title: "Blog de Aulas de POO"
+listing:
+  contents: posts
+  type: default
+  sort: "date desc"
+  categories: true
+  feed: true
+  fields: [image, date, title, reading-time, categories]
+page-layout: full
+title-block-banner: false
+---

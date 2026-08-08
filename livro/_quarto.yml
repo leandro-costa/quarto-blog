@@ -1,0 +1,31 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Programação Orientada a Objetos"
+  subtitle: "Material de Aulas — Turma 2026.1 ADS"
+  author: "Leandro Souza"
+  date: today
+  date-format: "DD/MM/YYYY"
+  chapters:
+    - index.qmd
+    - aula-14-heranca.qmd
+    - part: "Exercícios"
+      chapters:
+        - exercicio-21-generics.qmd
+
+format:
+  typst:
+    papersize: a4
+    documentclass: book
+    toc: true
+    number-sections: true
+    fontsize: 11pt
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+
+execute:
+  freeze: auto
+  cache: true
