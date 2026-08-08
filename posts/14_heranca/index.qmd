@@ -363,7 +363,7 @@ podemos **reescrever** (sobrescrever, *override*) esse método. Assim, o
 resultado correto passa a ser `750.0`, e não `500.0` como seria herdando o
 método sem reescrevê-lo.
 
-::: {.callout-note title="A anotação \@Override"}
+::: {.callout-note title="A anotação Override"}
 Há como deixar explícito no seu código que determinado método é a reescrita
 de um método da sua classe mãe. Fazemos isso colocando `@Override` acima do
 método. Por questões de compatibilidade, isso não é obrigatório — mas, se um
