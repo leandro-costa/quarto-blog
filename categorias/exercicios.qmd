@@ -1,7 +1,7 @@
 ---
 title: "Exercícios"
 listing:
-  contents: ../posts
+  contents: /posts
   type: default
   sort: "date desc"
   categories: false
