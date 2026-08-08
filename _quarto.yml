@@ -5,9 +5,9 @@ project:
 website:
   title: "2026.1 ADS POO"
   description: "Material das Aulas"
-  site-url: "https://20261-ifba-saj-ads-poo.github.io/blog-quarto/"
+  site-url: "https://leandro-costa.github.io/quarto-blog/"
   favicon: logo.svg
-  repo-url: https://github.com/20261-ifba-saj-ads-poo/blog-quarto
+  repo-url: https://github.com/leandro-costa/quarto-blog
   page-navigation: true
 
   navbar:
@@ -31,7 +31,7 @@ website:
       - href: about.qmd
         text: Sobre
       - icon: github
-        href: https://github.com/20261-ifba-saj-ads-poo/blog-quarto
+        href: https://github.com/leandro-costa/quarto-blog
 
   sidebar:
     style: "docked"
