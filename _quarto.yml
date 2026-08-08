@@ -25,6 +25,9 @@ website:
       - href: categorias/entregas.qmd
         text: "Para Entrega"
     right:
+      - href: livro-poo.pdf
+        text: "Baixar PDF"
+        icon: file-earmark-pdf
       - href: about.qmd
         text: Sobre
       - icon: github

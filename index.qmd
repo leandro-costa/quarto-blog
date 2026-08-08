@@ -10,3 +10,8 @@ listing:
 page-layout: full
 title-block-banner: false
 ---
+
+::: {.callout-tip appearance="simple"}
+Todas as aulas deste blog também estão disponíveis reunidas em um único
+livro. [📄 Baixar o livro completo em PDF](livro-poo.pdf){.btn .btn-primary role="button"}
+:::
