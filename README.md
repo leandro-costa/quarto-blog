@@ -113,9 +113,13 @@ worker funcionar (não funciona abrindo o HTML direto do disco, `file://`).
 Use `quarto preview .` normalmente. Em produção, o GitHub Pages já serve
 tudo em HTTPS.
 
-**Atualizando o cache**: sempre que fizer uma mudança grande no site, suba
-a versão do `CACHE_NAME` em `service-worker.js` (ex.: `poo-blog-cache-v2`)
-para forçar os navegadores a descartar o cache antigo.
+**Atualizando o cache**: o `CACHE_NAME` usa um placeholder
+(`__COMMIT_SHA__`) que o workflow do GitHub Actions substitui
+automaticamente pelo hash curto do commit a cada deploy — ou seja, todo
+push que altera o site já força os navegadores a descartar o cache antigo
+e buscar a versão nova, sem precisar editar nada manualmente. Rodando
+`quarto preview .` localmente, o placeholder fica literal no arquivo (sem
+efeito prático além do nome do cache).
 
 
 

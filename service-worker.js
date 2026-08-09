@@ -1,4 +1,4 @@
-const CACHE_NAME = "poo-blog-cache-v1";
+const CACHE_NAME = "poo-blog-cache-__COMMIT_SHA__";
 
 // Caminhos relativos ao escopo do service worker (funciona tanto em
 // localhost quanto publicado em GitHub Pages num subdiretório, ex.:

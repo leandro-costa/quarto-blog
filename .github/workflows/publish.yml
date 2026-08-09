@@ -45,6 +45,11 @@ jobs:
       - name: Render do site (blog)
         run: quarto render .
 
+      - name: Versionar cache do service worker com o commit
+        run: |
+          SHA_CURTO=$(echo "${{ github.sha }}" | cut -c1-7)
+          sed -i "s/__COMMIT_SHA__/${SHA_CURTO}/" _site/service-worker.js
+
       - name: Render do livro (PDF via Typst)
         run: quarto render --profile book --to typst
 
