@@ -6,6 +6,11 @@ project:
     - "posts/**"
     - "categorias/**"
     - "!capitulos/**"
+  resources:
+    - manifest.webmanifest
+    - service-worker.js
+    - icons/**
+    - logo.svg
 
 lang: pt-BR
 
@@ -55,6 +60,7 @@ format:
     code-copy: true
     code-tools: true
     highlight-style: github
+    include-in-header: pwa-head.html
 
 execute:
   freeze: auto    # não reexecuta código de posts antigos que não mudaram

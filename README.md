@@ -87,7 +87,37 @@ A pasta `capitulos/` não é renderizada como parte do site (excluída via
 `project.render` no `_quarto.yml`) — ela existe só para dar um título de
 capítulo a cada aula quando incluída no livro.
 
-## Formatação ABNT do PDF
+## PWA (Progressive Web App)
+
+O site pode ser instalado como app (celular ou desktop) e continua
+funcionando offline para páginas já visitadas. A implementação usa:
+
+- `manifest.webmanifest` — nome, ícones, cor do tema, modo `standalone`.
+- `service-worker.js` — cacheia o "app shell" no primeiro acesso e usa a
+  estratégia *stale-while-revalidate* (responde do cache instantaneamente e
+  atualiza em segundo plano quando há conexão). O PDF do livro é
+  deliberadamente excluído do cache automático (arquivo grande, melhor
+  buscar sempre a versão mais recente quando online).
+- `pwa-head.html` — incluído via `include-in-header` no formato HTML: link
+  do manifest, `theme-color`, ícones para tela inicial (Android/iOS) e o
+  script que registra o service worker.
+- `icons/` — ícones gerados a partir de `logo.svg` (192×192, 512×512,
+  apple-touch-icon, favicons).
+
+Esses arquivos são estáticos (não são `.qmd`), então precisam estar
+listados em `project.resources` no `_quarto.yml` para o Quarto copiá-los
+para `_site/` no build — já configurado.
+
+**Testando localmente**: PWAs exigem HTTPS ou `localhost` para o service
+worker funcionar (não funciona abrindo o HTML direto do disco, `file://`).
+Use `quarto preview .` normalmente. Em produção, o GitHub Pages já serve
+tudo em HTTPS.
+
+**Atualizando o cache**: sempre que fizer uma mudança grande no site, suba
+a versão do `CACHE_NAME` em `service-worker.js` (ex.: `poo-blog-cache-v2`)
+para forçar os navegadores a descartar o cache antigo.
+
+
 
 O profile `_quarto-book.yml` aplica formatação inspirada na NBR 14724
 (margens 3cm/3cm/2cm/2cm, fonte 12pt, recuo de parágrafo de 1,25cm,

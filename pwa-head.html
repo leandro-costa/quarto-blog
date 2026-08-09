@@ -1,0 +1,21 @@
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#46bd87">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="POO Blog">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      // Caminho relativo à página atual: funciona tanto local quanto
+      // publicado num subdiretório do GitHub Pages.
+      var swUrl = new URL("service-worker.js", document.baseURI).href;
+      navigator.serviceWorker.register(swUrl).catch(function (err) {
+        console.warn("Falha ao registrar o service worker:", err);
+      });
+    });
+  }
+</script>
