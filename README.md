@@ -6,8 +6,10 @@ Quarto, com duas melhorias:
 1. Blocos de código Java em ```{java}``` são **compilados e executados de
    verdade** no momento do `quarto render`, via kernel Jupyter **IJava**
    (JShell por baixo dos panos). Se o código não compilar, o build quebra.
-2. O mesmo conteúdo das aulas alimenta automaticamente um **livro em PDF**
-   (`livro/`), gerado com **Typst**.
+2. O mesmo conteúdo das aulas alimenta automaticamente um **livro em PDF**,
+   gerado com **Typst** — usando **Quarto Project Profiles**, de forma que
+   site e livro compartilham a mesma raiz de projeto e o mesmo
+   `references.bib` (arquivo único, sem duplicação).
 
 ## Instalação local
 
@@ -28,54 +30,64 @@ python3 ijava/install.py --user
 ## Rodando localmente
 
 ```bash
-# Site (blog)
+# Site (blog) — profile padrão
 quarto preview .
 
-# Livro em PDF (Typst)
-quarto render livro --to typst
+# Livro em PDF (Typst) — profile "book"
+quarto render --profile book --to typst
 ```
 
-O PDF gerado fica em `livro/_book/`.
+O PDF gerado fica em `_book/`.
+
+## Como funcionam os profiles
+
+Este projeto usa um único `_quarto.yml` (configuração do site/blog) mais um
+`_quarto-book.yml` que sobrescreve apenas o necessário para gerar o livro:
+`project.type` vira `book`, e o formato de saída vira `typst`. Como os dois
+compartilham a mesma raiz de projeto, não existe mais um subprojeto
+isolado — e por isso `references.bib` existe em um único lugar, sem
+sandbox separado do Typst para se preocupar.
+
+```bash
+quarto render --profile book   # usa _quarto.yml + _quarto-book.yml combinados
+```
 
 ## Estrutura
 
 ```
 poo-blog/
-├── _quarto.yml            # config do site (navbar = Blog/Aulas/Exercícios/Trabalho/Para Entrega)
-├── index.qmd               # home / listagem geral
-├── about.qmd                # perfil do professor
-├── categorias/              # uma página de listing por categoria (equivalente às páginas de categoria do Hope)
+├── _quarto.yml               # config do site (navbar = Blog/Aulas/Exercícios/Trabalho/Para Entrega)
+├── _quarto-book.yml           # profile do livro (project.type: book, format: typst)
+├── references.bib             # bibliografia única, compartilhada por site e livro
+├── index.qmd                   # home / listagem geral
+├── about.qmd                    # perfil do professor
+├── categorias/                  # uma página de listing por categoria (equivalente às páginas de categoria do Hope)
 │   ├── aulas.qmd
 │   ├── exercicios.qmd
 │   ├── trabalhos.qmd
 │   └── entregas.qmd
 ├── posts/
-│   ├── _metadata.yml        # metadados comuns (engine jupyter + kernel java)
-│   ├── 14_heranca/index.qmd
-│   └── exercicios/21_Parcial2_generics/index.qmd
-├── livro/                   # projeto separado, type: book, format: typst
-│   ├── _quarto.yml
-│   ├── index.qmd            # prefácio
-│   ├── aula-14-heranca.qmd          # {{< include >}} do post real
-│   └── exercicio-21-generics.qmd    # {{< include >}} do post real
-├── styles.scss               # customização visual (cor #46bd87, igual ao tema original)
-└── .github/workflows/publish.yml   # build + deploy (GitHub Pages) com JDK/IJava configurados
+│   ├── _metadata.yml            # metadados comuns (engine jupyter + kernel java)
+│   ├── 14_heranca/
+│   │   ├── index.qmd              # front matter do post (title, date, categories)
+│   │   └── _content.qmd            # conteúdo real (sem front matter, reaproveitado no livro)
+│   └── exercicio/21_Parcial2_generics/
+│       ├── index.qmd
+│       └── _content.qmd
+├── capitulos/                   # wrappers só para o livro (título + include do _content.qmd)
+│   ├── prefacio.qmd
+│   ├── aula-14-heranca.qmd
+│   ├── exercicio-21-generics.qmd
+│   └── referencias.qmd
+├── styles.scss                   # customização visual (cor #46bd87, igual ao tema original)
+└── .github/workflows/publish.yml     # build + deploy (GitHub Pages) com JDK/IJava configurados
 ```
 
-## Bibliografia (references.bib)
+A pasta `capitulos/` não é renderizada como parte do site (excluída via
+`project.render` no `_quarto.yml`) — ela existe só para dar um título de
+capítulo a cada aula quando incluída no livro.
 
-Existem **duas cópias** do arquivo `references.bib`: uma na raiz do projeto
-(usada pelo site/blog em HTML) e outra dentro de `livro/` (usada pelo livro
-em PDF). Isso é necessário porque o compilador do Typst roda em um sandbox
-que não permite acessar arquivos fora da pasta do projeto do livro
-(`livro/`) — um caminho como `../references.bib` é bloqueado.
-
-Sempre que adicionar ou editar uma citação, atualize as duas cópias:
-
-```bash
-cp references.bib livro/references.bib
-```
-
+## Adicionando uma nova aula
 
 1. Criar `posts/NN_titulo/index.qmd` com front matter:
    ```yaml
@@ -85,21 +97,24 @@ cp references.bib livro/references.bib
    date: "AAAA-MM-DD"
    categories: [aula, tema1, tema2]
    ---
+
+   {{< include _content.qmd >}}
    ```
-2. Escrever o conteúdo normalmente; usar ```{java}``` para blocos que devem
-   ser compilados/executados, ou ```` ```java ```` (sem chaves) para trechos
-   apenas ilustrativos que não devem rodar.
+2. Criar `posts/NN_titulo/_content.qmd` com o conteúdo real (sem front
+   matter). Usar ```{java}``` para blocos que devem ser compilados/
+   executados, ou ```` ```java ```` (sem chaves) para trechos apenas
+   ilustrativos que não devem rodar.
 3. `quarto preview .` já mostra a aula na listagem automaticamente.
-4. Se quiser incluir a aula no livro, criar um `.qmd` em `livro/` com um
-   `{{< include >}}` apontando para o post e adicionar em `book.chapters` no
-   `livro/_quarto.yml`.
+4. Se quiser incluir a aula no livro, criar um `.qmd` em `capitulos/` com
+   um `{{< include >}}` apontando para o `_content.qmd` e adicionar em
+   `book.chapters` no `_quarto-book.yml`.
 
 ## Publicando
 
 O workflow `.github/workflows/publish.yml` já:
 - instala JDK 21 + Jupyter + kernel IJava no runner;
 - renderiza o site inteiro (`quarto render .`);
-- renderiza o livro em PDF via Typst;
+- renderiza o livro em PDF via Typst (`quarto render --profile book --to typst`);
 - copia o PDF para dentro do site publicado (`_site/livro-poo.pdf`);
 - publica no GitHub Pages.
 

@@ -2,8 +2,6 @@ project:
   type: book
   output-dir: _book
 
-lang: pt-BR
-
 book:
   title: "Material de Aulas — Turma 2026.1 ADS"
   subtitle: "Programação Orientada a Objetos"
@@ -11,14 +9,12 @@ book:
   date: today
   date-format: "DD/MM/YYYY"
   chapters:
-    - index.qmd
-    - aula-14-heranca.qmd
+    - capitulos/prefacio.qmd
+    - capitulos/aula-14-heranca.qmd
     - part: "Exercícios"
       chapters:
-        - exercicio-21-generics.qmd
-    - referencias.qmd
-
-bibliography: references.bib
+        - capitulos/exercicio-21-generics.qmd
+    - capitulos/referencias.qmd
 
 format:
   typst:

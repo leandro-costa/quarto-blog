@@ -46,10 +46,10 @@ jobs:
         run: quarto render .
 
       - name: Render do livro (PDF via Typst)
-        run: quarto render livro --to typst
+        run: quarto render --profile book --to typst
 
       - name: Copiar PDF do livro para dentro do site
-        run: cp livro/_book/*.pdf _site/livro-poo.pdf
+        run: cp _book/*.pdf _site/livro-poo.pdf
 
       - name: Upload artefato do Pages
         uses: actions/upload-pages-artifact@v3

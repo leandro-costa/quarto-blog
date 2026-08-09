@@ -1,6 +1,13 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - "*.qmd"
+    - "posts/**"
+    - "categorias/**"
+    - "!capitulos/**"
+
+lang: pt-BR
 
 website:
   title: "2026.1 ADS POO"

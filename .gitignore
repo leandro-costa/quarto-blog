@@ -1,6 +1,5 @@
 /.quarto/
 /_site/
+/_book/
 /_freeze/
-/livro/_book/
-/livro/.quarto/
 .DS_Store
