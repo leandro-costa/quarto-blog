@@ -62,7 +62,20 @@ poo-blog/
 └── .github/workflows/publish.yml   # build + deploy (GitHub Pages) com JDK/IJava configurados
 ```
 
-## Adicionando uma nova aula
+## Bibliografia (references.bib)
+
+Existem **duas cópias** do arquivo `references.bib`: uma na raiz do projeto
+(usada pelo site/blog em HTML) e outra dentro de `livro/` (usada pelo livro
+em PDF). Isso é necessário porque o compilador do Typst roda em um sandbox
+que não permite acessar arquivos fora da pasta do projeto do livro
+(`livro/`) — um caminho como `../references.bib` é bloqueado.
+
+Sempre que adicionar ou editar uma citação, atualize as duas cópias:
+
+```bash
+cp references.bib livro/references.bib
+```
+
 
 1. Criar `posts/NN_titulo/index.qmd` com front matter:
    ```yaml

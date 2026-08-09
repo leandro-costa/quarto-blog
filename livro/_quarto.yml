@@ -18,7 +18,7 @@ book:
         - exercicio-21-generics.qmd
     - referencias.qmd
 
-bibliography: ../references.bib
+bibliography: references.bib
 
 format:
   typst:
