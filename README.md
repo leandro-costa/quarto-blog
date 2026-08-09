@@ -87,7 +87,32 @@ A pasta `capitulos/` não é renderizada como parte do site (excluída via
 `project.render` no `_quarto.yml`) — ela existe só para dar um título de
 capítulo a cada aula quando incluída no livro.
 
-## Adicionando uma nova aula
+## Formatação ABNT do PDF
+
+O profile `_quarto-book.yml` aplica formatação inspirada na NBR 14724
+(margens 3cm/3cm/2cm/2cm, fonte 12pt, recuo de parágrafo de 1,25cm,
+entrelinhas ~1,5, sumário/referências/citações com links clicáveis, e
+uma bibliografia formatada com o estilo `abnt.csl`), além de um capítulo de
+**Glossário** e listas de figuras/tabelas (`lof`/`lot`).
+
+Dois pontos de atenção:
+
+- **`lof`/`lot` em Typst são um recurso recente do Quarto** (chegou junto
+  com o suporte a livros em Typst). Se a sua versão do Quarto for anterior
+  ou essas listas não aparecerem no PDF, atualize o Quarto
+  (`quarto --version` deve ser 1.9 ou mais recente).
+- O arquivo `abnt.csl` foi baixado do repositório oficial do
+  [Citation Style Language](https://github.com/citation-style-language/styles)
+  e já está no projeto — não precisa reinstalar nada.
+
+Essa formatação atende bem a **material didático/apostila**. Se este PDF
+for usado como TCC, dissertação ou outro documento formal que exige
+conformidade estrita com a ABNT (capa padronizada, folha de rosto, ficha
+catalográfica, resumo em português/inglês etc.), essas seções adicionais
+precisam ser criadas à parte — não são geradas automaticamente a partir do
+conteúdo do blog.
+
+
 
 1. Criar `posts/NN_titulo/index.qmd` com front matter:
    ```yaml

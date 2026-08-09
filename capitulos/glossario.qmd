@@ -1,0 +1,45 @@
+# Glossário {.unnumbered}
+
+Herança
+: Mecanismo pelo qual uma classe (subclasse) reaproveita atributos e
+  comportamentos definidos em outra classe (superclasse), podendo
+  estendê-los com características próprias.
+
+Superclasse
+: Também chamada de classe mãe ou classe base. Classe mais genérica de uma
+  hierarquia, cujos atributos e métodos são herdados pelas subclasses.
+
+Subclasse
+: Também chamada de classe filha ou classe derivada. Classe que estende uma
+  superclasse, herdando seus membros e podendo adicionar ou sobrescrever
+  comportamentos.
+
+Sobrescrita de método (*Override*)
+: Redefinição, em uma subclasse, do comportamento de um método já definido
+  na superclasse, mantendo a mesma assinatura.
+
+Polimorfismo
+: Capacidade de um mesmo método se comportar de maneiras diferentes
+  dependendo do tipo real do objeto que o invoca em tempo de execução.
+
+Classe abstrata
+: Classe que não pode ser instanciada diretamente, servindo como modelo
+  para subclasses concretas que devem implementar seus métodos abstratos.
+
+Classe selada (*sealed*)
+: Classe cuja lista de subclasses permitidas é definida explicitamente pelo
+  desenvolvedor, restringindo quais tipos podem estendê-la.
+
+Generics
+: Recurso que permite escrever classes, interfaces e métodos parametrizados
+  por tipo, possibilitando reutilização de código com segurança de tipos em
+  tempo de compilação.
+
+DAO (*Data Access Object*)
+: Padrão de projeto que isola a lógica de acesso a dados (persistência) do
+  restante da aplicação, expondo uma interface simples para operações de
+  CRUD.
+
+CRUD
+: Acrônimo para as quatro operações básicas de persistência de dados:
+  Create (criar), Read (consultar), Update (atualizar) e Delete (excluir).
