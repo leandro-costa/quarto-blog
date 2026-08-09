@@ -40,10 +40,6 @@ website:
       - icon: github
         href: https://github.com/leandro-costa/quarto-blog
 
-  sidebar:
-    style: "docked"
-    contents: auto
-
   page-footer:
     center: "Material de aula IFBA SAJ · Copyright © 2026 Leandro Souza"
 
