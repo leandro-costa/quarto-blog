@@ -112,7 +112,25 @@ poo-blog/
 └── .github/workflows/publish.yml      # build + deploy (GitHub Pages) com JDK/IJava configurados
 ```
 
-## PWA (Progressive Web App)
+## Aparência do código (Prism.js) e saída em estilo terminal
+
+- **Destaque de sintaxe (Prism.js)**: o Quarto usa o destaque nativo do
+  Pandoc por padrão; trocamos por [Prism.js](https://prismjs.com/)
+  (tema `tomorrow`, via CDN) para ter a aparência visual do Prism nos
+  blocos de código. Como a marcação do Pandoc e a do Prism não são
+  compatíveis diretamente, `highlight-style: none` desliga o destaque do
+  Pandoc (deixa o texto puro) e `prism-foot.html` remonta as classes que o
+  Prism espera (`language-java`, `line-numbers`) antes de chamar
+  `Prism.highlightAll()`. Isso acontece no navegador do leitor, não no
+  build — então funciona sem precisar instalar nada no CI.
+- **Saída da execução em estilo terminal**: os blocos `.cell-output-stdout`,
+  `.cell-output-stderr` e `.cell-output-error` (onde o Quarto mostra o que
+  o código `{java}` imprimiu ao rodar) ganharam fundo escuro, fonte
+  monoespaçada e as três "bolinhas" de janela no topo, para diferenciar
+  visualmente "isto é a saída do programa" de "isto é o código-fonte"
+  (estilizado pelo Prism). Erros ficam com um destaque vermelho na borda.
+
+
 
 O site pode ser instalado como app (celular ou desktop) e continua
 funcionando offline para páginas já visitadas. A implementação usa:

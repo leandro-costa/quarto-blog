@@ -19,3 +19,40 @@ $code-block-font-size: 0.85em;
 pre.sourceCode {
   border-radius: 6px;
 }
+
+// Saída da execução dos blocos {java} (stdout/stderr/erros) com
+// aparência de terminal: fundo escuro, fonte monoespaçada, "bolinhas"
+// de janela no topo, cor diferente para erro.
+.cell-output-stdout pre,
+.cell-output-stderr pre,
+.cell-output-error pre {
+  background-color: #0d1117;
+  color: #c9d1d9;
+  border-radius: 8px;
+  padding: 2.25rem 1.25rem 1.25rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  position: relative;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.cell-output-stdout pre::before,
+.cell-output-stderr pre::before,
+.cell-output-error pre::before {
+  content: "● ● ●";
+  position: absolute;
+  top: 0.6rem;
+  left: 1rem;
+  color: #6e7681;
+  letter-spacing: 4px;
+  font-size: 0.7em;
+}
+
+.cell-output-stderr pre,
+.cell-output-error pre {
+  background-color: #2b1113;
+  color: #ffb3b3;
+  border-left: 3px solid #ff4d4f;
+}

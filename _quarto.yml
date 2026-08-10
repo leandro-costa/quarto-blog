@@ -61,8 +61,9 @@ format:
     toc: true
     code-copy: true
     code-tools: true
-    highlight-style: github
-    include-in-header: pwa-head.html
+    highlight-style: none
+    include-in-header: [pwa-head.html, prism-head.html]
+    include-after-body: prism-foot.html
 
 execute:
   freeze: auto    # não reexecuta código de posts antigos que não mudaram

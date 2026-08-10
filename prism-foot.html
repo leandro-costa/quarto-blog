@@ -1,0 +1,33 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<script>
+  // O Quarto/Pandoc gera <div class="sourceCode java"><pre><code>...</code></pre></div>,
+  // já com os tokens coloridos pelo destaque interno do Pandoc. Para usar a
+  // aparência do Prism.js, primeiro removemos essa marcação (spans do
+  // Pandoc) mantendo só o texto puro, depois adicionamos as classes que o
+  // Prism espera (language-xxx) e deixamos o Prism tokenizar/colorir.
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("div.sourceCode").forEach(function (wrapper) {
+      var lang = Array.from(wrapper.classList).find(function (c) {
+        return c !== "sourceCode";
+      });
+      var codeEl = wrapper.querySelector("pre > code");
+      var preEl = wrapper.querySelector("pre");
+      if (!codeEl || !preEl) return;
+
+      // Extrai o texto puro (sem os <span> de destaque do Pandoc).
+      var plainText = codeEl.textContent;
+      codeEl.textContent = plainText;
+
+      if (lang) {
+        codeEl.className = "language-" + lang;
+        preEl.classList.add("language-" + lang, "line-numbers");
+      }
+    });
+
+    if (window.Prism) {
+      Prism.highlightAll();
+    }
+  });
+</script>

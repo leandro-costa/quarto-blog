@@ -1,0 +1,203 @@
+/* ==========================================================================
+   Blocos de código — aparência inspirada no Prism.js
+   ========================================================================== */
+
+div.sourceCode {
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.25em 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+pre.sourceCode {
+  padding: 1em 1.1em;
+  margin: 0;
+  font-family: "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+    monospace;
+  font-size: 0.88em;
+  line-height: 1.55;
+  background: #f5f2f0;
+  overflow-x: auto;
+  tab-size: 4;
+}
+
+/* Barra de título com o nome da linguagem, como o plugin de Toolbar do
+   Prism.js costuma mostrar no canto superior direito do bloco. */
+div.sourceCode {
+  position: relative;
+}
+
+div.sourceCode::before {
+  display: block;
+  padding: 0.35em 1em;
+  font-family: "Fira Code", Consolas, Monaco, monospace;
+  font-size: 0.72em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b6b6b;
+  background: #ebe6e2;
+  border-bottom: 1px solid #ddd6d0;
+}
+
+div.sourceCode.java::before {
+  content: "Java";
+}
+div.sourceCode.bash::before,
+div.sourceCode.sh::before {
+  content: "Shell";
+}
+div.sourceCode.yaml::before {
+  content: "YAML";
+}
+div.sourceCode.python::before {
+  content: "Python";
+}
+div.sourceCode:not(.java):not(.bash):not(.sh):not(.yaml):not(.python)::before {
+  content: "Código";
+}
+
+/* Paleta de tokens no estilo do tema padrão do Prism.js (fundo claro,
+   comentários acinzentados, strings em verde, palavras-chave em azul). */
+code span.co {
+  color: #708090;
+  font-style: italic;
+} /* comentário */
+code span.st {
+  color: #690;
+} /* string */
+code span.kw {
+  color: #07a;
+  font-weight: 600;
+} /* palavra-chave */
+code span.dt {
+  color: #dd4a68;
+} /* tipo de dado */
+code span.dv,
+code span.bn,
+code span.fl {
+  color: #905;
+} /* números */
+code span.fu {
+  color: #dd4a68;
+} /* função */
+code span.cn,
+code span.va {
+  color: #905;
+} /* constante / variável */
+code span.op {
+  color: #9a6e3a;
+} /* operador */
+code span.im {
+  color: #07a;
+} /* import */
+code span.an,
+code span.cv,
+code span.do {
+  color: #708090;
+  font-style: italic;
+} /* anotações/docs */
+
+/* Tema escuro: paleta próxima do "Prism Okaidia". */
+[data-bs-theme="dark"] pre.sourceCode {
+  background: #272822;
+  color: #f8f8f2;
+}
+[data-bs-theme="dark"] div.sourceCode::before {
+  background: #1e1f1c;
+  color: #a8a8a2;
+  border-bottom-color: #3a3a35;
+}
+[data-bs-theme="dark"] code span.co {
+  color: #8292a2;
+}
+[data-bs-theme="dark"] code span.st {
+  color: #e6db74;
+}
+[data-bs-theme="dark"] code span.kw {
+  color: #f92672;
+}
+[data-bs-theme="dark"] code span.dt {
+  color: #66d9ef;
+}
+[data-bs-theme="dark"] code span.dv,
+[data-bs-theme="dark"] code span.bn,
+[data-bs-theme="dark"] code span.fl {
+  color: #ae81ff;
+}
+[data-bs-theme="dark"] code span.fu {
+  color: #a6e22e;
+}
+[data-bs-theme="dark"] code span.op {
+  color: #f92672;
+}
+
+/* ==========================================================================
+   Saída da execução do código (stdout dos blocos {java}) — aparência de
+   terminal, para deixar claro que aquilo é resultado de execução real,
+   diferente do código-fonte em si.
+   ========================================================================== */
+
+.cell-output-stdout,
+.cell-output-stderr {
+  margin: 0 0 1.25em 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* "Barra de título" com as três bolinhas no estilo macOS, só decorativa. */
+.cell-output-stdout::before,
+.cell-output-stderr::before {
+  content: "";
+  display: block;
+  height: 1.8em;
+  background: #3a3d41 linear-gradient(#44474b, #3a3d41);
+  border-bottom: 1px solid #232527;
+  background-image: radial-gradient(
+      circle 5px at 16px 50%,
+      #ff5f56 5px,
+      transparent 5.5px
+    ),
+    radial-gradient(circle 5px at 36px 50%, #ffbd2e 5px, transparent 5.5px),
+    radial-gradient(circle 5px at 56px 50%, #27c93f 5px, transparent 5.5px);
+}
+
+.cell-output-stdout pre,
+.cell-output-stderr pre {
+  margin: 0;
+  padding: 0.9em 1.1em;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono",
+    monospace;
+  font-size: 0.85em;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.cell-output-stdout pre code,
+.cell-output-stderr pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Cada linha da saída ganha um "prompt" discreto, reforçando a leitura de
+   terminal sem exigir JavaScript. */
+.cell-output-stdout pre {
+  counter-reset: linha;
+}
+.cell-output-stdout pre code {
+  display: block;
+}
+
+.cell-output-stderr pre {
+  color: #ff8383;
+}
+
+.cell-output-stderr::before {
+  background: #4a2626 linear-gradient(#552d2d, #4a2626);
+}
