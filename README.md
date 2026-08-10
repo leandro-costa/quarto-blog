@@ -173,7 +173,43 @@ catalográfica, resumo em português/inglês etc.), essas seções adicionais
 precisam ser criadas à parte — não são geradas automaticamente a partir do
 conteúdo do blog.
 
-## Adicionando uma nova aula
+## Diagramas com PlantUML
+
+O projeto usa a extensão [pandoc-ext/diagram](https://github.com/pandoc-ext/diagram)
+(instalada em `_extensions/diagram/`, licença MIT) para renderizar diagramas
+a partir de código, em vez de depender de imagens externas
+(`plantuml.com` etc.). Funciona tanto no site quanto no livro — o livro
+usa a mesma extensão via link simbólico (`livro/_extensions -> ../_extensions`).
+
+Exemplo de uso em qualquer post:
+
+````markdown
+```{.plantuml}
+//| label: fig-exemplo
+//| fig-cap: "Legenda do diagrama"
+@startuml
+class Pessoa
+class Aluno
+Pessoa <|-- Aluno
+@enduml
+```
+````
+
+Requisitos para renderizar (já configurados no workflow do CI):
+- **Java** (já é necessário para o kernel IJava, então é reaproveitado);
+- **Graphviz** (`apt-get install graphviz`) para diagramas de classe/estado;
+- o `plantuml.jar` baixado das releases oficiais do
+  [plantuml/plantuml](https://github.com/plantuml/plantuml) no GitHub.
+
+Para rodar localmente, instale o Graphviz e baixe o `plantuml.jar`,
+criando um executável `plantuml` no PATH que rode
+`java -jar plantuml.jar "$@"` (o mesmo que o workflow faz).
+
+Outros tipos de diagrama suportados pela mesma extensão, sem configuração
+extra: Mermaid (`{mermaid}`, nativo do Quarto), Graphviz/Dot (`{dot}`,
+nativo do Quarto), D2, TikZ, Asymptote, CeTZ.
+
+
 
 1. Criar `posts/NN_titulo/index.qmd` com front matter:
    ```yaml

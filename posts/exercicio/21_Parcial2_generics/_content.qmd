@@ -212,7 +212,57 @@ public class UsuarioController {
 }
 ```
 
-![Relação entre a camada de modelo e a camada de serviço](https://www.plantuml.com/plantuml/svg/bPBTYW8n38Nl-nIvr7UGPRoI1HSM71yWjb42dLRIp20i--vscBfA7OMzwj_vpab2cwGesdVUcEPlYuUaWbR1Uam9rkNu5HtvLVlnOw05TkRNc4cmJpqAHw2BKd0ri8tXD38x5Gud2B6ZE_ejqVNwJvI3aXpH4kn81hPnAYfVGq8_e2nQeA3iqD7Im256JnXW8E4Zs-ev-rNzRYXafPsywRCxZqq3vvMwpAKtgVqqYUMzmQAjHpIJKIIZvtF5D_vbG3t8cO0YcG-uyOy1JNOQ_qDPhm00)
+```{.plantuml}
+//| label: fig-camadas
+//| fig-cap: "Relação entre a camada de modelo e a camada de serviço"
+@startuml
+skinparam classAttributeIconSize 0
+
+abstract class AbstractModel<T> {
+  -T id
+  -LocalDateTime createdAt
+  -LocalDateTime updatedAt
+}
+
+class Usuario extends AbstractModel {
+  -String nome
+  -String email
+}
+
+interface GenericDAO<T, ID> {
+  +salvar(T) : ID
+  +atualizar(T)
+  +buscarPorId(ID) : T
+  +deletar(ID)
+  +buscarTodos() : List<T>
+}
+
+class GenericDAOImpl<T, ID> implements GenericDAO
+
+interface GenericService<T, ID> {
+  +salvar(T) : ID
+  +atualizar(T)
+  +buscarPorId(ID) : T
+  +deletar(ID)
+  +buscarTodos() : List<T>
+  +validar(T)
+}
+
+abstract class GenericServiceImpl<T, ID> implements GenericService
+
+class UsuarioDAO extends GenericDAOImpl
+class UsuarioService extends GenericServiceImpl
+class UsuarioController
+
+AbstractModel <|-- Usuario
+GenericDAO <|.. GenericDAOImpl
+GenericDAOImpl <|-- UsuarioDAO
+GenericService <|.. GenericServiceImpl
+GenericServiceImpl <|-- UsuarioService
+UsuarioService o-- UsuarioDAO
+UsuarioController o-- GenericService
+@enduml
+```
 
 Defina um conjunto de comportamentos para fazer a inserção (*create*),
 consulta por `id` (*read*), alteração (*update*) e exclusão (*delete*) de

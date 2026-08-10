@@ -17,6 +17,9 @@ book:
     - referencias.qmd
     - glossario.qmd
 
+filters:
+  - diagram
+
 lang: pt-BR
 bibliography: references.bib
 csl: abnt.csl

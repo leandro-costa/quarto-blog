@@ -39,6 +39,13 @@ jobs:
           unzip -q ijava.zip -d ijava
           python3 ijava/install.py --sys-prefix
 
+      - name: Instalar PlantUML e Graphviz (para os diagramas)
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq graphviz
+          curl -L https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar -o /usr/local/bin/plantuml.jar
+          printf '#!/bin/sh\nexec java -jar /usr/local/bin/plantuml.jar "$@"\n' | sudo tee /usr/local/bin/plantuml > /dev/null
+          sudo chmod +x /usr/local/bin/plantuml
+
       - name: Instalar Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
