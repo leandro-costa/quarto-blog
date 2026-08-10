@@ -49,6 +49,9 @@ jobs:
       - name: Instalar Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      - name: Gerar capítulos do livro
+        run: python3 scripts/generate-book.py
+
       - name: Render do site (blog)
         run: quarto render .
 

@@ -1,3 +1,0 @@
-# Herança
-
-{{< include ../posts/14_heranca/_content.qmd >}}

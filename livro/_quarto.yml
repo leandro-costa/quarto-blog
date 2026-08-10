@@ -10,10 +10,10 @@ book:
   date-format: "DD/MM/YYYY"
   chapters:
     - index.qmd
-    - aula-14-heranca.qmd
+    - 14_heranca.qmd
     - part: "Exercícios"
       chapters:
-        - exercicio-21-generics.qmd
+        - 21_Parcial2_generics.qmd
     - referencias.qmd
     - glossario.qmd
 
@@ -35,29 +35,18 @@ format:
     number-sections: true
     fontsize: 12pt
     margin:
-      # Formatação de margens conforme ABNT NBR 14724: 3cm à esquerda e no
-      # topo, 2cm à direita e na base.
       left: 3cm
       top: 3cm
       right: 2cm
       bottom: 2cm
     include-in-header:
       text: |
-        // Corrige a numeração dos títulos (2.1, 2.1.1 etc.) para ficar
-        // alinhada com a margem do texto, em vez de "pendurada" mais
-        // próxima da borda da página.
         #set par(hanging-indent: 0pt)
         #show heading: it => {
           set par(hanging-indent: 0pt)
           block(it, above: 1.6em, below: 1em)
         }
-
-        // Recuo de primeira linha e espaçamento entre linhas próximos do
-        // exigido pela ABNT (recuo de 1,25cm; entrelinhas 1,5).
         #set par(first-line-indent: 1.25cm, leading: 1em, justify: true)
-
-        // Links (referências, sumário, citações) ficam sublinhados e em
-        // azul, deixando claro que são clicáveis no PDF.
         #show link: it => underline(text(fill: rgb("#1a56db"), it))
 
 execute:
