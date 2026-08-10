@@ -75,7 +75,7 @@ poo-blog/
 │       ├── index.qmd
 │       └── _content.qmd
 ├── capitulos/                   # wrappers só para o livro (título + include do _content.qmd)
-│   ├── prefacio.qmd
+│   ├── index.qmd
 │   ├── aula-14-heranca.qmd
 │   ├── exercicio-21-generics.qmd
 │   └── referencias.qmd

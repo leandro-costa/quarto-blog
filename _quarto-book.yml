@@ -9,7 +9,7 @@ book:
   date: today
   date-format: "DD/MM/YYYY"
   chapters:
-    - capitulos/prefacio.qmd
+    - capitulos/index.qmd
     - capitulos/aula-14-heranca.qmd
     - part: "Exercícios"
       chapters:
