@@ -9,14 +9,15 @@ book:
   date: today
   date-format: "DD/MM/YYYY"
   chapters:
-    - capitulos/index.qmd
-    - capitulos/aula-14-heranca.qmd
+    - index.qmd
+    - aula-14-heranca.qmd
     - part: "Exercícios"
       chapters:
-        - capitulos/exercicio-21-generics.qmd
-    - capitulos/referencias.qmd
-    - capitulos/glossario.qmd
+        - exercicio-21-generics.qmd
+    - referencias.qmd
+    - glossario.qmd
 
+lang: pt-BR
 bibliography: references.bib
 csl: abnt.csl
 
@@ -55,7 +56,6 @@ format:
         // Links (referências, sumário, citações) ficam sublinhados e em
         // azul, deixando claro que são clicáveis no PDF.
         #show link: it => underline(text(fill: rgb("#1a56db"), it))
-
 
 execute:
   freeze: auto

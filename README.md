@@ -6,10 +6,8 @@ Quarto, com duas melhorias:
 1. Blocos de código Java em ```{java}``` são **compilados e executados de
    verdade** no momento do `quarto render`, via kernel Jupyter **IJava**
    (JShell por baixo dos panos). Se o código não compilar, o build quebra.
-2. O mesmo conteúdo das aulas alimenta automaticamente um **livro em PDF**,
-   gerado com **Typst** — usando **Quarto Project Profiles**, de forma que
-   site e livro compartilham a mesma raiz de projeto e o mesmo
-   `references.bib` (arquivo único, sem duplicação).
+2. O mesmo conteúdo das aulas alimenta automaticamente um **livro em PDF**
+   (`livro/`), gerado com **Typst**.
 
 ## Instalação local
 
@@ -30,26 +28,53 @@ python3 ijava/install.py --user
 ## Rodando localmente
 
 ```bash
-# Site (blog) — profile padrão
+# Site (blog)
 quarto preview .
 
-# Livro em PDF (Typst) — profile "book"
-quarto render --profile book --to typst
+# Livro em PDF (Typst)
+quarto render livro --to typst
 ```
 
-O PDF gerado fica em `_book/`.
+O PDF gerado fica em `livro/_book/`.
 
-## Como funcionam os profiles
+## Por que `livro/` é um subprojeto separado (e não um profile)
 
-Este projeto usa um único `_quarto.yml` (configuração do site/blog) mais um
-`_quarto-book.yml` que sobrescreve apenas o necessário para gerar o livro:
-`project.type` vira `book`, e o formato de saída vira `typst`. Como os dois
-compartilham a mesma raiz de projeto, não existe mais um subprojeto
-isolado — e por isso `references.bib` existe em um único lugar, sem
-sandbox separado do Typst para se preocupar.
+Já tentamos usar Quarto Project Profiles (um único `_quarto.yml` alternando
+`project.type` entre `website` e `book`) para ter um `references.bib`
+verdadeiramente único. Esbarramos numa limitação documentada do próprio
+Quarto: **todo projeto `book` exige um `index.qmd` na raiz do projeto**
+(é a home page do livro, obrigatória mesmo para saída só em PDF, porque
+Quarto livros também geram uma versão HTML). Não existe uma chave de
+configuração (`book: index:` ou similar) para apontar isso para outro
+arquivo. Como a raiz do site já tem seu próprio `index.qmd` (a home do
+blog, com conteúdo totalmente diferente), os dois projetos não podem
+compartilhar a mesma raiz — por isso `livro/` voltou a ser um subprojeto
+com seu próprio `_quarto.yml` e seu próprio `index.qmd`.
+
+## Bibliografia e estilo de citação únicos (via symlink)
+
+Para não duplicar fisicamente os arquivos `references.bib` e `abnt.csl`,
+`livro/references.bib` e `livro/abnt.csl` são **links simbólicos** para os
+arquivos na raiz do projeto:
 
 ```bash
-quarto render --profile book   # usa _quarto.yml + _quarto-book.yml combinados
+livro/references.bib -> ../references.bib
+livro/abnt.csl        -> ../abnt.csl
+```
+
+Assim existe uma única fonte de verdade, editada em um único lugar, mesmo
+com dois projetos Quarto distintos. Isso funciona porque o Typst só
+recusa caminhos que **escapem** da pasta do projeto quando o caminho é
+resolvido literalmente (ex.: `../references.bib` dentro do YAML); como o
+symlink já fica fisicamente dentro de `livro/`, o Typst enxerga um arquivo
+local normal. Se o `git clone` do repositório for feito em um sistema que
+não preserva links simbólicos (raro, mas acontece em alguns ambientes
+Windows sem privilégio de administrador), o symlink pode virar um arquivo
+de texto com o caminho em vez do conteúdo real — nesse caso, a solução de
+contingência é copiar o conteúdo manualmente:
+```bash
+cp references.bib livro/references.bib
+cp abnt.csl livro/abnt.csl
 ```
 
 ## Estrutura
@@ -57,35 +82,35 @@ quarto render --profile book   # usa _quarto.yml + _quarto-book.yml combinados
 ```
 poo-blog/
 ├── _quarto.yml               # config do site (navbar = Blog/Aulas/Exercícios/Trabalho/Para Entrega)
-├── _quarto-book.yml           # profile do livro (project.type: book, format: typst)
-├── references.bib             # bibliografia única, compartilhada por site e livro
-├── index.qmd                   # home / listagem geral
-├── about.qmd                    # perfil do professor
-├── categorias/                  # uma página de listing por categoria (equivalente às páginas de categoria do Hope)
+├── references.bib             # bibliografia (fonte única — livro/references.bib é um symlink pra cá)
+├── abnt.csl                    # estilo de citação ABNT (fonte única — livro/abnt.csl é um symlink pra cá)
+├── index.qmd                    # home / listagem geral do blog
+├── about.qmd                     # perfil do professor
+├── categorias/                   # uma página de listing por categoria (equivalente às páginas de categoria do Hope)
 │   ├── aulas.qmd
 │   ├── exercicios.qmd
 │   ├── trabalhos.qmd
 │   └── entregas.qmd
 ├── posts/
-│   ├── _metadata.yml            # metadados comuns (engine jupyter + kernel java)
+│   ├── _metadata.yml             # metadados comuns (engine jupyter + kernel java)
 │   ├── 14_heranca/
-│   │   ├── index.qmd              # front matter do post (title, date, categories)
-│   │   └── _content.qmd            # conteúdo real (sem front matter, reaproveitado no livro)
+│   │   ├── index.qmd               # front matter do post (title, date, categories)
+│   │   └── _content.qmd             # conteúdo real (sem front matter, reaproveitado no livro)
 │   └── exercicio/21_Parcial2_generics/
 │       ├── index.qmd
 │       └── _content.qmd
-├── capitulos/                   # wrappers só para o livro (título + include do _content.qmd)
-│   ├── index.qmd
-│   ├── aula-14-heranca.qmd
+├── livro/                        # subprojeto do livro (project.type: book, format: typst)
+│   ├── _quarto.yml
+│   ├── index.qmd                   # prefácio — home page obrigatória do livro
+│   ├── aula-14-heranca.qmd           # título + {{< include >}} do _content.qmd real
 │   ├── exercicio-21-generics.qmd
-│   └── referencias.qmd
-├── styles.scss                   # customização visual (cor #46bd87, igual ao tema original)
-└── .github/workflows/publish.yml     # build + deploy (GitHub Pages) com JDK/IJava configurados
+│   ├── referencias.qmd
+│   ├── glossario.qmd
+│   ├── references.bib               # symlink -> ../references.bib
+│   └── abnt.csl                      # symlink -> ../abnt.csl
+├── styles.scss                    # customização visual (cor #46bd87, igual ao tema original)
+└── .github/workflows/publish.yml      # build + deploy (GitHub Pages) com JDK/IJava configurados
 ```
-
-A pasta `capitulos/` não é renderizada como parte do site (excluída via
-`project.render` no `_quarto.yml`) — ela existe só para dar um título de
-capítulo a cada aula quando incluída no livro.
 
 ## PWA (Progressive Web App)
 
@@ -121,13 +146,13 @@ e buscar a versão nova, sem precisar editar nada manualmente. Rodando
 `quarto preview .` localmente, o placeholder fica literal no arquivo (sem
 efeito prático além do nome do cache).
 
+## Formatação ABNT do PDF
 
-
-O profile `_quarto-book.yml` aplica formatação inspirada na NBR 14724
-(margens 3cm/3cm/2cm/2cm, fonte 12pt, recuo de parágrafo de 1,25cm,
-entrelinhas ~1,5, sumário/referências/citações com links clicáveis, e
-uma bibliografia formatada com o estilo `abnt.csl`), além de um capítulo de
-**Glossário** e listas de figuras/tabelas (`lof`/`lot`).
+O `livro/_quarto.yml` aplica formatação inspirada na NBR 14724 (margens
+3cm/3cm/2cm/2cm, fonte 12pt, recuo de parágrafo de 1,25cm, entrelinhas
+~1,5, sumário/referências/citações com links clicáveis, e bibliografia
+formatada com o estilo `abnt.csl`), além de um capítulo de **Glossário** e
+listas de figuras/tabelas (`lof`/`lot`).
 
 Dois pontos de atenção:
 
@@ -135,9 +160,11 @@ Dois pontos de atenção:
   com o suporte a livros em Typst). Se a sua versão do Quarto for anterior
   ou essas listas não aparecerem no PDF, atualize o Quarto
   (`quarto --version` deve ser 1.9 ou mais recente).
-- O arquivo `abnt.csl` foi baixado do repositório oficial do
-  [Citation Style Language](https://github.com/citation-style-language/styles)
-  e já está no projeto — não precisa reinstalar nada.
+- Quando `format: typst` é usado em um projeto `book`, o Quarto usa
+  automaticamente a extensão `orange-book`, que já traz um estilo de
+  livro-texto pronto — nosso `include-in-header` sobrescreve pontualmente
+  a numeração de títulos e o espaçamento, mas o restante do visual (cores,
+  cabeçalhos de capítulo) vem dessa extensão por padrão.
 
 Essa formatação atende bem a **material didático/apostila**. Se este PDF
 for usado como TCC, dissertação ou outro documento formal que exige
@@ -146,7 +173,7 @@ catalográfica, resumo em português/inglês etc.), essas seções adicionais
 precisam ser criadas à parte — não são geradas automaticamente a partir do
 conteúdo do blog.
 
-
+## Adicionando uma nova aula
 
 1. Criar `posts/NN_titulo/index.qmd` com front matter:
    ```yaml
@@ -164,16 +191,16 @@ conteúdo do blog.
    executados, ou ```` ```java ```` (sem chaves) para trechos apenas
    ilustrativos que não devem rodar.
 3. `quarto preview .` já mostra a aula na listagem automaticamente.
-4. Se quiser incluir a aula no livro, criar um `.qmd` em `capitulos/` com
-   um `{{< include >}}` apontando para o `_content.qmd` e adicionar em
-   `book.chapters` no `_quarto-book.yml`.
+4. Se quiser incluir a aula no livro, criar um `.qmd` em `livro/` com um
+   `{{< include >}}` apontando para o `_content.qmd` e adicionar em
+   `book.chapters` no `livro/_quarto.yml`.
 
 ## Publicando
 
 O workflow `.github/workflows/publish.yml` já:
 - instala JDK 21 + Jupyter + kernel IJava no runner;
 - renderiza o site inteiro (`quarto render .`);
-- renderiza o livro em PDF via Typst (`quarto render --profile book --to typst`);
+- renderiza o livro em PDF via Typst (`quarto render livro --to typst`);
 - copia o PDF para dentro do site publicado (`_site/livro-poo.pdf`);
 - publica no GitHub Pages.
 

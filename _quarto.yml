@@ -5,7 +5,6 @@ project:
     - "*.qmd"
     - "posts/**"
     - "categorias/**"
-    - "!capitulos/**"
   resources:
     - manifest.webmanifest
     - service-worker.js

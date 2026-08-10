@@ -51,10 +51,10 @@ jobs:
           sed -i "s/__COMMIT_SHA__/${SHA_CURTO}/" _site/service-worker.js
 
       - name: Render do livro (PDF via Typst)
-        run: quarto render --profile book --to typst
+        run: quarto render livro --to typst
 
       - name: Copiar PDF do livro para dentro do site
-        run: cp _book/*.pdf _site/livro-poo.pdf
+        run: cp livro/_book/*.pdf _site/livro-poo.pdf
 
       - name: Upload artefato do Pages
         uses: actions/upload-pages-artifact@v3
