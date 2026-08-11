@@ -1,0 +1,9 @@
+---
+title: Exercício Java no W3C
+date: 2026-05-05 19:45:00-03:00
+categories:
+  - exercicio
+  - java
+order: 1
+author: Leandro Souza
+---

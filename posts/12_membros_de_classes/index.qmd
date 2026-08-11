@@ -1,0 +1,9 @@
+---
+title: Membros de classes
+date: 2026-06-01 18:30:00-03:00
+categories:
+  - aula
+  - static
+order: 12
+author: Leandro Souza
+---

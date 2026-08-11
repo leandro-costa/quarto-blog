@@ -1,0 +1,9 @@
+---
+title: Hierarquia Militar Simplificada
+date: 2026-05-25 19:50:00-03:00
+categories:
+  - exercicio
+  - java
+order: 11
+author: Leandro Souza
+---

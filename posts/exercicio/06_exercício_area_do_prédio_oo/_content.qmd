@@ -1,0 +1,11 @@
+# Exercício: Area do Prédio OO
+
+
+1. Escreva um programa em OO para calcular o preço do aluguel de todo um prédio comercial. 
+    - Cada andar do prédio tem um valor de metro quadrado diferente. 
+    - Cada andar do prédio pode ter uma quantidade de salas diferentes.
+    - Cada sala pode ter um tamanho diferente.
+
+
+
+[Repositório JavaFX](https://github.com/20261-ifba-saj-ads-poo/javafx-predio)

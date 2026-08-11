@@ -1,0 +1,10 @@
+---
+title: Interface
+date: 2026-08-03 18:00:00-03:00
+categories:
+  - aula
+  - classes-abstratas
+  - interface
+order: 20
+author: Leandro Souza
+---

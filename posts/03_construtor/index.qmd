@@ -1,0 +1,9 @@
+---
+title: Construtor
+date: 2026-05-04 18:00:00-03:00
+categories:
+  - aula
+  - construtor
+order: 3
+author: Leandro Souza
+---

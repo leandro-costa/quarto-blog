@@ -1,0 +1,48 @@
+# Parcial 1 do trabalho
+
+Entregar as telas funcionais do sistema
+
+
+| Aluno                                                       | Trabalho Sorteado                         |
+| ----------------------------------------------------------- | ----------------------------------------- |
+| ADELSON ROCHA RIBEIRO ( 20261TADSSAJ0032 )                  | [Trabalho](../../trabalhos/Trabalho01.md) |
+| ALDO BITENCOURT SILVA ( 20232TADSSAJ0015 )                  | [Trabalho](../../trabalhos/Trabalho02.md) |
+| ALLAN VICTOR SILVA MERCES ( 20231TADSSAJ0024 )              | [Trabalho](../../trabalhos/Trabalho03.md) |
+| ANNA BEATRIZ DA COSTA CRUZ ( 20251TADSSAJ0012 )             | [Trabalho](../../trabalhos/Trabalho04.md) |
+| Arthur Santos Andrade ( 20251TADSSAJ0005 )                  | [Trabalho](../../trabalhos/Trabalho05.md) |
+| BRUNO SILVA DE JESUS ARGOLO ( 20241TADSSAJ0009 )            | [Trabalho](../../trabalhos/Trabalho06.md) |
+| CAUA VITOR NOGUEIRA SANTOS DA SILVA ( 20242TADSSAJ0013 )    | [Trabalho](../../trabalhos/Trabalho07.md) |
+| Chrystian dos Santos Carvalho ( 20242TADSSAJ0003 )          | [Trabalho](../../trabalhos/Trabalho08.md) |
+| CLEBERSON SANTOS DE ASSIS ( 20242TADSSAJ0002 )              | [Trabalho](../../trabalhos/Trabalho09.md) |
+| CLEIÇON BISPO SOUZA ( 20241TADSSAJ0035 )                    | [Trabalho](../../trabalhos/Trabalho10.md) |
+| DAVI COSTA DOS SANTOS ( 20251TADSSAJ0009 )                  | [Trabalho](../../trabalhos/Trabalho11.md) |
+| DAVI DE OLIVEIRA MACEDO ( 20251TADSSAJ0029 )                | [Trabalho](../../trabalhos/Trabalho12.md) |
+| DAVI LOPES QUEIROZ ( 20251TADSSAJ0023 )                     | [Trabalho](../../trabalhos/Trabalho13.md) |
+| ESLEI QUEVIN CARVALHO DA SILVA ( 20251TADSSAJ0025 )         | [Trabalho](../../trabalhos/Trabalho14.md) |
+| Fabricio Lima De Jesus ( 20251TADSSAJ0016 )                 | [Trabalho](../../trabalhos/Trabalho15.md) |
+| FELIPE GABRIEL SILVA ROCHA ( 20251TADSSAJ0002 )             | [Trabalho](../../trabalhos/Trabalho16.md) |
+| Felipe Souza Santos ( 20251TADSSAJ0015 )                    | [Trabalho](../../trabalhos/Trabalho17.md) |
+| GIZELLY QUEIROZ ALMEIDA DOS SANTOS ( 20251TADSSAJ0006 )     | [Trabalho](../../trabalhos/Trabalho18.md) |
+| GUILHERME LACERDA SANTOS ( 20251TADSSAJ0001 )               | [Trabalho](../../trabalhos/Trabalho19.md) |
+| HADNAN DOS SANTOS MENEZES ( 20251TADSSAJ0028 )              | [Trabalho](../../trabalhos/Trabalho20.md) |
+| Isabela Souza Santos ( 20251TADSSAJ0010 )                   | [Trabalho](../../trabalhos/Trabalho21.md) |
+| ISRAEL SANTIAGO DOS SANTOS ( 20242TADSSAJ0025 )             | [Trabalho](../../trabalhos/Trabalho22.md) |
+| JADE MARIA SANTOS RIBEIRO ( 20241TADSSAJ0010 )              | [Trabalho](../../trabalhos/Trabalho23.md) |
+| JOAN GABRIEL DE JESUS DOS SANTOS BISPO ( 20251TADSSAJ0017 ) | [Trabalho](../../trabalhos/Trabalho24.md) |
+| JOAO LUCAS SOUZA DE ALMEIDA ( 20251TADSSAJ0003 )            | [Trabalho](../../trabalhos/Trabalho25.md) |
+| João Vitor Gomes Santos ( 20242TADSSAJ0012 )                | [Trabalho](../../trabalhos/Trabalho26.md) |
+| JOAO VITOR MOURA DE OLIVEIRA ( 20251TADSSAJ0007 )           | [Trabalho](../../trabalhos/Trabalho27.md) |
+| JONATHAN SOUSA ANDRADE ( 20261TADSSAJ0031 )                 | [Trabalho](../../trabalhos/Trabalho28.md) |
+| JULIA MATTOS STRAUCH ( 20251TADSSAJ0018 )                   | [Trabalho](../../trabalhos/Trabalho29.md) |
+| Luigi Andrade Cortes ( 20261TADSSAJ0033 )                   | [Trabalho](../../trabalhos/Trabalho30.md) |
+| MARCOS VINICIUS BARBOSA DE FIGUEIREDO ( 20251TADSSAJ0022 )  | [Trabalho](../../trabalhos/Trabalho31.md) |
+| PAULO HENRIQUE DOS SANTOS CAIRES ( 20251TADSSAJ0011 )       | [Trabalho](../../trabalhos/Trabalho32.md) |
+| RAISSA CARNEIRO CASTRO ( 20242TADSSAJ0034 )                 | [Trabalho](../../trabalhos/Trabalho33.md) |
+| RIQUELMI DOS SANTOS SANTANA ( 20251TADSSAJ0014 )            | [Trabalho](../../trabalhos/Trabalho34.md) |
+| STEFANY VITORIA ANUNCIACAO DE ALMEIDA ( 20241TADSSAJ0021 )  | [Trabalho](../../trabalhos/Trabalho35.md) |
+| WENDEL MOTA DOS SANTOS ( 20241TADSSAJ0014 )                 | [Trabalho](../../trabalhos/Trabalho36.md) |
+
+
+## Entrega
+
+[Link](https://classroom.github.com/a/BCAnRDqX)

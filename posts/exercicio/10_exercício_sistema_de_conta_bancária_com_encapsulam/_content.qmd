@@ -1,0 +1,30 @@
+# Exercício: Sistema de Conta Bancária com Encapsulamento
+
+adaptado de [^Takenami]
+
+
+1. Utilizando os conhecimentos de encapsulamento, construa um programa para representar uma Conta Bancária. A conta deve ter as seguintes características:
+
+    - **Número da conta**: código identificador da conta (não pode ser alterado após criação);
+    - **Titular**: nome do titular da conta;
+    - **Saldo**: valor atual na conta (inicia em 0);
+    - **Limite**: limite de crédito especial disponível (inicia em 100.00 por padrão).
+
+    As seguintes operações devem ser implementadas:
+    - **Depositar**: adiciona um valor ao saldo (valor deve ser maior que zero);
+    - **Sacar**: remove um valor do saldo (não permite saque se valor for maior que saldo + limite);
+    - **Consultar Saldo**: retorna o saldo atual;
+    - **Transferir**: transfere valor de uma conta para outra (valida se tem saldo suficiente).
+
+    O programa deve seguir estas regras de encapsulamento:
+    - O saldo e o limite não podem ser acessados diretamente de fora da classe;
+    - O número da conta não pode ser alterado após a criação;
+    - Todas as operações de alteração de saldo devem validar os dados antes de executar;
+    - Deve ser possível consultar o saldo total disponível (saldo + limite).
+
+1. Escreva o código em Java para criar 2 contas, realizar depósitos, saques e uma transferência entre elas, mostrando o resultado de cada operação.
+
+
+
+[Entrega](https://classroom.github.com/a/RS5e0CP1)
+<!-- @include: ../../../includes/bib.md -->

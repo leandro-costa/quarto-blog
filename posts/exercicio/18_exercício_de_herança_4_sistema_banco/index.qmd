@@ -1,0 +1,10 @@
+---
+title: Exercício de Herança 4 (Sistema banco)
+date: 2026-07-27 19:30:00-03:00
+categories:
+  - exercicio
+  - entrega
+  - heranca
+order: 18
+author: Leandro Souza
+---

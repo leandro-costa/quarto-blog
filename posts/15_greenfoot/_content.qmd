@@ -1,0 +1,103 @@
+# Greenfoot
+
+```java 
+import greenfoot.*;  
+
+public class Fase1 extends World
+{
+
+    public Fase1()
+    {    
+        super(1200, 800, 1); 
+        prepare();
+    }
+    
+    private void prepare()
+    {
+        Tartaruga tartaruga = new Tartaruga();
+        addObject(tartaruga,146,226);
+        Sapo sapo = new Sapo();
+        addObject(sapo,143,390);
+        for (int i = 0; i< 30; i++){
+            addObject(new Alimento(),Greenfoot.getRandomNumber(1100),Greenfoot.getRandomNumber(700));
+        }
+        
+    }
+}
+
+```
+
+```java 
+import greenfoot.*;  
+
+public class Alimento extends Actor
+{
+}
+
+```
+
+
+```java 
+
+import greenfoot.*;  
+public class Animal extends Actor
+{
+    private String esquerda;
+    private String direita;
+    private int contadorX;
+    private int contadorY;
+    private int contador = 0;
+    
+    Animal(String esquerda, String direita, int contadorX, int contadorY){
+        this.esquerda = esquerda;
+        this.direita = direita;
+        this.contadorX = contadorX;
+        this.contadorY = contadorY;
+        
+    }
+    
+    public void act()
+    {
+        move(4);
+        if(Greenfoot.isKeyDown(direita)){
+            turn(4);    
+        }
+        if(Greenfoot.isKeyDown(esquerda)){
+            turn(-4);    
+        }
+        
+        if(isTouching(Alimento.class)){
+            removeTouching(Alimento.class);
+            contador++;
+        }
+        
+        getWorld().showText(String.valueOf(contador), contadorX, contadorY);
+        
+       
+    }
+}
+
+```
+
+
+```java 
+import greenfoot.*;  
+public class Sapo extends Animal
+{
+    Sapo(){
+        super("q","w",10, 10);
+    }    
+}
+```
+
+
+```java 
+import greenfoot.*; 
+public class Tartaruga extends Animal
+{
+    Tartaruga(){
+        super("o","p", 1180, 10);
+    }
+
+}
+```

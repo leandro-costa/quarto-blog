@@ -1,0 +1,8 @@
+---
+title: Plano de Curso de Disciplina do Ensino Superior
+date: 2026-04-27 07:30:00-03:00
+categories:
+  - Plano de Curso
+  - ementa
+author: Leandro Souza
+---

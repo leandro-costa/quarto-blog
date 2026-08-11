@@ -1,0 +1,10 @@
+---
+title: Encapsulamento
+date: 2026-05-18 18:10:00-03:00
+categories:
+  - aula
+  - pacote
+  - encapsulamento
+order: 8
+author: Leandro Souza
+---

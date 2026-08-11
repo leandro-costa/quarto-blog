@@ -1,0 +1,69 @@
+# Trabalho 13 – Sistema de Gerenciamento de Inventário de TI – Equipamentos
+
+## Cenário
+Um departamento de TI precisa de um sistema desktop para cadastrar, controlar e acompanhar o inventário de equipamentos (computadores, monitores, periféricos, etc.). O desenvolvimento será em **Java**, usando **JavaFX** e a arquitetura em **três camadas**.
+
+## Requisitos Funcionais
+| Camada | Funcionalidade |
+|--------|----------------|
+| **Apresentação (JavaFX)** | Tela de cadastro de equipamentos, tela de atualização de status (em uso, em manutenção, descartado) e relatório de inventário. |
+| **Negócio** | • Validar dados (número de série, tipo, data de aquisição). <br>• Aplicar as regras de negócio abaixo. |
+| **Dados** | • Armazenar equipamentos em memória (`ArrayList`). <br>• Operações CRUD para equipamentos. |
+
+## Regras de Negócio (2)
+1. **Número de Série Único** – Cada equipamento deve possuir um número de série único. Se o usuário tentar cadastrar um equipamento com número já existente, a operação deve ser abortada e o usuário avisado.
+2. **Data de Aquisição Não Futurista** – A data de aquisição não pode ser posterior à data atual. Caso seja, a operação deve ser interrompida e o usuário receberá uma mensagem de erro.
+
+## Fluxo de Comunicação Entre as Camadas
+1. Usuário cadastra ou atualiza um equipamento na interface JavaFX.  
+2. A camada de apresentação envia os dados ao **Serviço de Inventário** (camada de negócio).  
+3. O serviço valida as duas regras; se válidas, delega ao **Repositório de Equipamentos** (camada de dados). Caso contrário, devolve mensagem de erro.  
+4. A camada de apresentação captura a mensagem e a exibe em um `Alert`.
+
+### Diagrama de Sequência
+```plantuml{kroki=true}
+@startuml
+actor Usuario
+box "Apresentação" #lightblue
+    participant TelaInventario
+end box
+box "Negócio" #lightgreen
+    participant ServicoInventario
+end box
+box "Persistência" #yellow
+    participant RepositorioEquipamento
+end box
+Usuario -> TelaInventario : cadastrar/atualizar equipamento
+TelaInventario -> ServicoInventario : processar(...)
+ServicoInventario -> ServicoInventario : validarNumeroSerie()
+ServicoInventario -> ServicoInventario : validarDataAquisicao()
+alt regras atendidas
+    ServicoInventario -> RepositorioEquipamento : salvar()
+    RepositorioEquipamento --> ServicoInventario : sucesso
+    ServicoInventario --> TelaInventario : sucesso
+    TelaInventario --> Usuario : Mensagem de sucesso
+else regra violada
+    ServicoInventario --> TelaInventario : mensagem de erro
+    TelaInventario --> Usuario : Exibir alerta
+end
+@enduml
+```
+
+## Barema de Avaliação (100 pontos)
+| Área | Peso | Critérios |
+|------|------|-----------|
+| **Interface Gráfica (JavaFX)** | 20 pts | Funcionalidade completa, usabilidade, mensagens de erro claras. |
+| **Camada de Negócio** | 30 pts | Implementação correta das duas regras, tratamento adequado das violações. |
+| **Camada de Dados** | 20 pts | Uso adequado de `ArrayList`, CRUD funcionando. |
+| **Separação em Camadas** | 20 pts | Arquitetura limpa, comunicação correta. |
+| **Boas Práticas** | 10 pts | Código legível, nomes coerentes, organização. |
+
+## Entregáveis
+1. Projeto Java completo (Maven/Gradle) com os pacotes `presentation`, `business`, `data` e `model`.  
+2. **README** com instruções de compilação e execução.  
+3. Diagrama de classes (UML) mostrando a entidade `Equipamento`.  
+4. Diagrama de sequência (acima) para o caso de uso **Cadastrar/Atualizar Equipamento**.  
+5. **Testes unitários** (JUnit) que comprovem:
+   - Cadastro bem‑sucedido com número de série único e data válida.
+   - Falha ao cadastrar número de série duplicado.
+   - Falha ao informar data de aquisição futura.

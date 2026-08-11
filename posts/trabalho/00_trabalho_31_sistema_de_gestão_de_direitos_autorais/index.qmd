@@ -1,0 +1,4 @@
+---
+title: Trabalho 31 – Sistema de Gestão de Direitos Autorais
+author: Leandro Souza
+---

@@ -1,0 +1,9 @@
+---
+title: Montando Ambiente de trabalho
+date: 2026-05-11 17:41:00-03:00
+categories:
+  - aula
+  - links
+order: 5
+author: Leandro Souza
+---

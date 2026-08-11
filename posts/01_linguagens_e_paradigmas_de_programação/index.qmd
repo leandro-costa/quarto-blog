@@ -1,0 +1,10 @@
+---
+title: Linguagens e paradigmas de programação
+date: 2026-04-28 17:40:00-03:00
+categories:
+  - aula
+  - java
+  - paradigmas
+order: 1
+author: Leandro Souza
+---

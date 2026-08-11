@@ -1,0 +1,11 @@
+---
+title: Exercício de Herança 2
+date: 2026-07-27 18:50:00-03:00
+categories:
+  - exercicio
+  - pratica
+  - entrega
+  - heranca
+order: 16
+author: Leandro Souza
+---

@@ -1,0 +1,11 @@
+---
+title: Exercício Sistema Biblioteca
+date: 2026-08-03 18:50:00-03:00
+categories:
+  - exercicio
+  - heranca
+  - abstratas
+  - interface
+order: 21
+author: Leandro Souza
+---

@@ -1,0 +1,10 @@
+---
+title: Exercício: Modelagem TV
+date: 2026-05-11 18:10:00-03:00
+categories:
+  - exercicio
+  - entrega
+  - java
+order: 5
+author: Leandro Souza
+---

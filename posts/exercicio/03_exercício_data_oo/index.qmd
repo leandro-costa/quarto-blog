@@ -1,0 +1,10 @@
+---
+title: Exercício: Data OO
+date: 2026-04-28 18:10:00-03:00
+categories:
+  - exercicio
+  - entrega
+  - java
+order: 3
+author: Leandro Souza
+---

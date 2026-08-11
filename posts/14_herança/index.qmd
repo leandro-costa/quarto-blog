@@ -1,0 +1,9 @@
+---
+title: Herança
+date: 2026-07-20 18:30:00-03:00
+categories:
+  - aula
+  - heranca
+order: 14
+author: Leandro Souza
+---

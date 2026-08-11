@@ -1,0 +1,12 @@
+---
+title: Exercício Generics - Trabalho Parcial 2
+date: 2026-08-03 19:50:00-03:00
+categories:
+  - trabalho
+  - exercicio
+  - entrega
+  - heranca
+  - generics
+order: 22
+author: Leandro Souza
+---

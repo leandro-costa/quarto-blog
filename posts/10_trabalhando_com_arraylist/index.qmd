@@ -1,0 +1,10 @@
+---
+title: Trabalhando com ArrayList
+date: 2026-05-25 18:30:00-03:00
+categories:
+  - aula
+  - vetor
+  - lista
+order: 10
+author: Leandro Souza
+---

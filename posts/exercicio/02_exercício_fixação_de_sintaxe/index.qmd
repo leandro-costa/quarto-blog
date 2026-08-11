@@ -1,0 +1,9 @@
+---
+title: Exercício: Fixação de sintaxe
+date: 2026-05-05 19:50:00-03:00
+categories:
+  - exercicio
+  - java
+order: 2
+author: Leandro Souza
+---

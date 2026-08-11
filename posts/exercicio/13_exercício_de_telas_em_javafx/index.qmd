@@ -1,0 +1,10 @@
+---
+title: Exercício de telas em JavaFX
+date: 2026-06-08 19:00:00-03:00
+categories:
+  - exercicio
+  - entrega
+  - java
+order: 13
+author: Leandro Souza
+---
