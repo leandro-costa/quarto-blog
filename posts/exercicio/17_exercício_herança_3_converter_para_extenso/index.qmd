@@ -1,5 +1,5 @@
 ---
-title: Exercício Herança 3: Converter para Extenso
+title: : "Exercício Herança 3: Converter para Extenso"
 date: 2026-07-27 19:00:00-03:00
 categories:
   - exercicio

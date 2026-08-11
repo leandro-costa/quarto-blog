@@ -1,5 +1,5 @@
 ---
-title: Exercício: Modelagem DVD com encapsulamento
+title: : "Exercício: Modelagem DVD com encapsulamento"
 date: 2026-05-18 19:20:00-03:00
 categories:
   - exercicio

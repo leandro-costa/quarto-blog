@@ -1,5 +1,5 @@
 ---
-title: Exercício: Modelagem Computador
+title: : "Exercício: Modelagem Computador"
 date: 2026-05-12 19:20:00-03:00
 categories:
   - exercicio

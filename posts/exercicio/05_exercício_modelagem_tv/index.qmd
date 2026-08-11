@@ -1,5 +1,5 @@
 ---
-title: Exercício: Modelagem TV
+title: : "Exercício: Modelagem TV"
 date: 2026-05-11 18:10:00-03:00
 categories:
   - exercicio

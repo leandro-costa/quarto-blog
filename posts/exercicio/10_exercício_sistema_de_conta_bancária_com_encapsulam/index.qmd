@@ -1,5 +1,5 @@
 ---
-title: Exercício: Sistema de Conta Bancária com Encapsulamento
+title: : "Exercício: Sistema de Conta Bancária com Encapsulamento"
 date: 2026-05-18 19:20:00-03:00
 categories:
   - exercicio
