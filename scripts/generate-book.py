@@ -299,7 +299,6 @@ csl: abnt.csl
 format:
   typst:
     papersize: a4
-    documentclass: book
     toc: true
     toc-title: "Sumario"
     number-sections: true
