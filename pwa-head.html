@@ -1,21 +1,55 @@
-<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#46bd87">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="POO Blog">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      // Caminho relativo à página atual: funciona tanto local quanto
-      // publicado num subdiretório do GitHub Pages.
-      var swUrl = new URL("service-worker.js", document.baseURI).href;
-      navigator.serviceWorker.register(swUrl).catch(function (err) {
-        console.warn("Falha ao registrar o service worker:", err);
-      });
+  // O Quarto ajusta automaticamente o caminho do <link rel="icon"> (vindo
+  // de website.favicon: logo.svg) para funcionar corretamente em qualquer
+  // profundidade de página (raiz, /posts/x/, /categorias/y/ etc.). Usamos
+  // esse link como referência confiável para descobrir a raiz real do
+  // site publicado — funciona tanto em localhost quanto no GitHub Pages,
+  // que serve o site num subdiretório (/quarto-blog/).
+  document.addEventListener("DOMContentLoaded", function () {
+    var faviconLink = document.querySelector('link[rel="icon"]');
+    if (!faviconLink) return;
+
+    // logo.svg sempre vive na raiz do projeto — removendo esse nome do
+    // final da URL resolvida (absoluta) sobra exatamente a raiz do site.
+    var siteRoot = faviconLink.href.replace(/logo\.svg(\?.*)?$/, "");
+    if (!siteRoot.endsWith("/")) siteRoot += "/";
+
+    function addLink(rel, href, extraAttrs) {
+      var link = document.createElement("link");
+      link.rel = rel;
+      link.href = href;
+      if (extraAttrs) {
+        Object.keys(extraAttrs).forEach(function (attr) {
+          link.setAttribute(attr, extraAttrs[attr]);
+        });
+      }
+      document.head.appendChild(link);
+    }
+
+    addLink("manifest", siteRoot + "manifest.webmanifest");
+    addLink("apple-touch-icon", siteRoot + "icons/apple-touch-icon.png");
+    addLink("icon", siteRoot + "icons/favicon-32.png", {
+      type: "image/png",
+      sizes: "32x32",
     });
-  }
+    addLink("icon", siteRoot + "icons/favicon-16.png", {
+      type: "image/png",
+      sizes: "16x16",
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register(siteRoot + "service-worker.js", { scope: siteRoot })
+          .catch(function (err) {
+            console.warn("Falha ao registrar o service worker:", err);
+          });
+      });
+    }
+  });
 </script>

@@ -2,27 +2,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 <script>
-  // O Quarto/Pandoc gera <div class="sourceCode java"><pre><code>...</code></pre></div>,
-  // já com os tokens coloridos pelo destaque interno do Pandoc. Para usar a
-  // aparência do Prism.js, primeiro removemos essa marcação (spans do
-  // Pandoc) mantendo só o texto puro, depois adicionamos as classes que o
-  // Prism espera (language-xxx) e deixamos o Prism tokenizar/colorir.
+  // O Quarto/Pandoc gera algo como:
+  //   <div class="sourceCode" id="cb1">
+  //     <pre class="sourceCode java"><code class="sourceCode java">...</code></pre>
+  //   </div>
+  // A classe de linguagem (ex.: "java") fica no <pre>/<code>, não no <div>
+  // externo — por isso lemos daqui. Removemos os <span> de destaque do
+  // Pandoc (texto puro) e adicionamos as classes que o Prism espera
+  // (language-xxx) para ele tokenizar/colorir do zero.
   document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("div.sourceCode").forEach(function (wrapper) {
-      var lang = Array.from(wrapper.classList).find(function (c) {
-        return c !== "sourceCode";
+    document.querySelectorAll("pre.sourceCode > code.sourceCode").forEach(function (codeEl) {
+      var preEl = codeEl.parentElement;
+      var classes = (preEl.className || "").split(/\s+/);
+      var lang = classes.find(function (c) {
+        return c && c !== "sourceCode";
       });
-      var codeEl = wrapper.querySelector("pre > code");
-      var preEl = wrapper.querySelector("pre");
-      if (!codeEl || !preEl) return;
 
-      // Extrai o texto puro (sem os <span> de destaque do Pandoc).
       var plainText = codeEl.textContent;
       codeEl.textContent = plainText;
 
       if (lang) {
         codeEl.className = "language-" + lang;
-        preEl.classList.add("language-" + lang, "line-numbers");
+        preEl.className = "language-" + lang + " line-numbers";
       }
     });
 
