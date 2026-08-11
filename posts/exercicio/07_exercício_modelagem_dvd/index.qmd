@@ -1,5 +1,5 @@
 ---
-title: : "Exercício: Modelagem DVD"
+title: "Exercício: Modelagem DVD"
 date: 2026-05-12 19:10:00-03:00
 categories:
   - exercicio

@@ -1,5 +1,5 @@
 ---
-title: : "Exercício: Data OO"
+title: "Exercício: Data OO"
 date: 2026-04-28 18:10:00-03:00
 categories:
   - exercicio
