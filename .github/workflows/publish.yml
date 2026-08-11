@@ -64,7 +64,7 @@ jobs:
           sed -i "s/__COMMIT_SHA__/${SHA_CURTO}/" _site/service-worker.js
 
       - name: Render do livro (PDF via Typst)
-        run: quarto render livro --to typst
+        run: quarto render livro --to pdf
 
       - name: Copiar PDF do livro para dentro do site
         run: cp livro/_book/*.pdf _site/livro-poo.pdf

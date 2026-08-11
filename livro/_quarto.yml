@@ -104,27 +104,17 @@ bibliography: references.bib
 csl: abnt.csl
 
 format:
-  typst:
-    template: null
+  pdf:
     papersize: a4
     toc: true
     toc-title: "Sumario"
     number-sections: true
     fontsize: 12pt
-    margin:
-      left: 3cm
-      top: 3cm
-      right: 2cm
-      bottom: 2cm
-    include-in-header:
-      text: |
-        #set par(hanging-indent: 0pt)
-        #show heading: it => {
-          set par(hanging-indent: 0pt)
-          block(it, above: 1.6em, below: 1em)
-        }
-        #set par(first-line-indent: 1.25cm, leading: 1em, justify: true)
-        #show link: it => underline(text(fill: rgb("#1a56db"), it))
+    geometry:
+      - left=3cm
+      - top=3cm
+      - right=2cm
+      - bottom=2cm
 
 execute:
   freeze: auto

@@ -297,8 +297,7 @@ bibliography: references.bib
 csl: abnt.csl
 
 format:
-  typst:
-    template: null
+  pdf:
     papersize: a4
     toc: true
     toc-title: "Sumario"
