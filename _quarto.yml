@@ -29,13 +29,13 @@ website:
     left:
       - href: index.qmd
         text: Blog
-      - href: categorias/aulas.qmd
+      - href: index.qmd#category=aula
         text: Aulas
-      - href: categorias/exercicios.qmd
+      - href: index.qmd#category=exercicio
         text: Exercícios
-      - href: categorias/trabalhos.qmd
+      - href: index.qmd#category=trabalho
         text: Trabalho
-      - href: categorias/entregas.qmd
+      - href: index.qmd#category=entrega
         text: "Para Entrega"
     right:
       - href: livro-poo.pdf
