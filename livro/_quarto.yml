@@ -4,14 +4,15 @@ project:
 
 book:
   title: "Material de Aulas — Turma 2026.1 ADS"
-  subtitle: "Programação Orientada a Objetos"
+  subtitle: "Programacao Orientada a Objetos"
   author: "Leandro Souza"
   date: today
   date-format: "DD/MM/YYYY"
   chapters:
     - index.qmd
+    - lof.qmd
     - 14_heranca.qmd
-    - part: "Exercícios"
+    - part: "Exercicios"
       chapters:
         - 21_Parcial2_generics.qmd
     - referencias.qmd
@@ -29,9 +30,9 @@ format:
     papersize: a4
     documentclass: book
     toc: true
-    toc-title: "Sumário"
-    lof: true
-    lot: true
+    toc-title: "Sumario"
+    # lof e lot desabilitados — bug do Quarto+Typst (#14081)
+    # Gerados manualmente pelo generate-book.py
     number-sections: true
     fontsize: 12pt
     margin:

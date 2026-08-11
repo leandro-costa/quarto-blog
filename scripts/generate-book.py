@@ -4,8 +4,10 @@ Gera automaticamente os capítulos do livro a partir dos posts.
 Executado via 'pre-render' no _quarto.yml raiz.
 
 Copia arquivos compartilhados (references.bib, abnt.csl, _extensions)
-para livro/ em vez de usar symlinks — funciona em qualquer SO,
-inclusive Windows sem privilégios especiais.
+para livro/ em vez de usar symlinks.
+
+Tambem gera Lista de Figuras (lof) e Lista de Tabelas (lot) manualmente,
+pois o Quarto+Typst tem um bug (issue #14081) onde lof/lot fica vazio.
 """
 import os
 import re
@@ -18,13 +20,11 @@ ROOT_DIR = Path(".")
 
 
 def extract_order(name: str) -> int:
-    """Extrai número de ordenação do início do nome da pasta."""
-    match = re.match(r'^(\d+)', name)
+    match = re.match(r"^(\d+)", name)
     return int(match.group(1)) if match else 999
 
 
 def read_yaml_frontmatter(filepath: Path) -> dict:
-    """Lê apenas o front matter YAML de um arquivo .qmd."""
     meta = {}
     if not filepath.exists():
         return meta
@@ -41,30 +41,25 @@ def read_yaml_frontmatter(filepath: Path) -> dict:
 
 
 def classify_part(categories: list) -> str | None:
-    """Determina a 'part' do livro com base nas categorias."""
     cat_set = set(c.lower() for c in categories)
     if cat_set & {"exercicio", "trabalho", "entrega"}:
-        return "Exercícios"
-    return None  # sem part = capítulo direto
+        return "Exercicios"
+    return None
 
 
 def copy_shared_files():
-    """Copia arquivos compartilhados da raiz para livro/ (sem symlinks)."""
-    # references.bib
     src_bib = ROOT_DIR / "references.bib"
     dst_bib = LIVRO_DIR / "references.bib"
     if src_bib.exists():
         shutil.copy2(src_bib, dst_bib)
         print(f"[generate-book] Copiado: {src_bib} -> {dst_bib}")
 
-    # abnt.csl
     src_csl = ROOT_DIR / "abnt.csl"
     dst_csl = LIVRO_DIR / "abnt.csl"
     if src_csl.exists():
         shutil.copy2(src_csl, dst_csl)
         print(f"[generate-book] Copiado: {src_csl} -> {dst_csl}")
 
-    # _extensions (diretório)
     src_ext = ROOT_DIR / "_extensions"
     dst_ext = LIVRO_DIR / "_extensions"
     if src_ext.exists():
@@ -74,32 +69,129 @@ def copy_shared_files():
         print(f"[generate-book] Copiado: {src_ext}/ -> {dst_ext}/")
 
 
+def extract_floats():
+    figuras = []
+    tabelas = []
+
+    for content_file in sorted(POSTS_DIR.rglob("_content.qmd"), key=lambda p: extract_order(p.parent.name)):
+        post_name = content_file.parent.name
+        index_file = content_file.parent / "index.qmd"
+        meta = read_yaml_frontmatter(index_file)
+        chapter_title = meta.get("title", post_name.replace("_", " ").title())
+
+        with open(content_file, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Figuras - padrao chunk: //| label: fig-xxx + //| fig-cap: "..."
+        for match in re.finditer(
+            r"//\|\s*label:\s*(fig-[\w-]+).*?//\|\s*fig-cap:\s*\"([^\"]+)\"",
+            content, re.DOTALL
+        ):
+            figuras.append({
+                "label": match.group(1),
+                "caption": match.group(2),
+                "chapter": chapter_title,
+            })
+
+        # Figuras - padrao div: ::: {#fig-xxx}\nCaption\n:::
+        for match in re.finditer(
+            r"::: \{#(fig-[\w-]+)\}\n([^\n]+?)\n:::",
+            content, re.DOTALL
+        ):
+            figuras.append({
+                "label": match.group(1),
+                "caption": match.group(2).strip(),
+                "chapter": chapter_title,
+            })
+
+        # Figuras - padrao markdown: ![caption](url){#fig-xxx}
+        for match in re.finditer(
+            r"!\[([^\]]*)\]\([^)]+\)\{?#(fig-[\w-]+)?\}?",
+            content
+        ):
+            fid = match.group(2)
+            if fid:
+                figuras.append({
+                    "label": fid,
+                    "caption": match.group(1),
+                    "chapter": chapter_title,
+                })
+
+        # Tabelas - padrao chunk: //| label: tbl-xxx + //| tbl-cap: "..."
+        for match in re.finditer(
+            r"//\|\s*label:\s*(tbl-[\w-]+).*?//\|\s*tbl-cap:\s*\"([^\"]+)\"",
+            content, re.DOTALL
+        ):
+            tabelas.append({
+                "label": match.group(1),
+                "caption": match.group(2),
+                "chapter": chapter_title,
+            })
+
+        # Tabelas - padrao div: ::: {#tbl-xxx}\nCaption\n:::
+        for match in re.finditer(
+            r"::: \{#(tbl-[\w-]+)\}\n([^\n]+?)\n:::",
+            content, re.DOTALL
+        ):
+            tabelas.append({
+                "label": match.group(1),
+                "caption": match.group(2).strip(),
+                "chapter": chapter_title,
+            })
+
+    return figuras, tabelas
+
+
+def generate_lof_lot(figuras, tabelas):
+    lof_lines = ["---", 'title: "Lista de Figuras"', "---", ""]
+    if figuras:
+        for i, fig in enumerate(figuras, 1):
+            lof_lines.append(f"{i}. **{fig['caption']}**  ")
+            lof_lines.append(f"   — *{fig['chapter']}*  ")
+            lof_lines.append("")
+    else:
+        lof_lines.append("Nenhuma figura encontrada.")
+
+    with open(LIVRO_DIR / "lof.qmd", "w", encoding="utf-8") as f:
+        f.write("\n".join(lof_lines))
+    print(f"[generate-book] Gerado: livro/lof.qmd ({len(figuras)} figuras)")
+
+    lot_lines = ["---", 'title: "Lista de Tabelas"', "---", ""]
+    if tabelas:
+        for i, tbl in enumerate(tabelas, 1):
+            lot_lines.append(f"{i}. **{tbl['caption']}**  ")
+            lot_lines.append(f"   — *{tbl['chapter']}*  ")
+            lot_lines.append("")
+    else:
+        lot_lines.append("Nenhuma tabela encontrada.")
+
+    with open(LIVRO_DIR / "lot.qmd", "w", encoding="utf-8") as f:
+        f.write("\n".join(lot_lines))
+    print(f"[generate-book] Gerado: livro/lot.qmd ({len(tabelas)} tabelas)")
+
+
 def main():
-    # 1. Copia arquivos compartilhados
     copy_shared_files()
 
-    # 2. Encontra todos os posts com _content.qmd
+    figuras, tabelas = extract_floats()
+    generate_lof_lot(figuras, tabelas)
+
     posts = []
     for content_file in sorted(POSTS_DIR.rglob("_content.qmd"), key=lambda p: extract_order(p.parent.name)):
         rel_path = content_file.relative_to(POSTS_DIR)
         post_name = content_file.parent.name
 
-        # Lê metadados do index.qmd
         index_file = content_file.parent / "index.qmd"
         meta = read_yaml_frontmatter(index_file)
 
         title = meta.get("title", post_name.replace("_", " ").title())
-        date = meta.get("date", "")
         categories = []
         if "categories" in meta:
             cats = meta["categories"]
-            # Pode ser lista YAML como [aula, heranca]
             cats = cats.strip("[]")
             categories = [c.strip().strip('"').strip("'") for c in cats.split(",")]
 
-        # Caminho relativo desde livro/ até o _content.qmd
         include_path = f"../posts/{rel_path}"
-
         part = classify_part(categories)
 
         posts.append({
@@ -110,27 +202,22 @@ def main():
             "order": extract_order(post_name),
         })
 
-    # 3. Limpa arquivos .qmd gerados anteriormente no livro/
-    # Mantém apenas arquivos fixos: index.qmd, referencias.qmd, glossario.qmd
-    fixed_files = {"index.qmd", "referencias.qmd", "glossario.qmd", "_quarto.yml"}
+    fixed_files = {"index.qmd", "referencias.qmd", "glossario.qmd", "lof.qmd", "lot.qmd", "_quarto.yml"}
     for f in LIVRO_DIR.glob("*.qmd"):
         if f.name not in fixed_files:
             f.unlink()
 
-    # 4. Gera os arquivos .qmd do livro
     for post in posts:
         qmd_path = LIVRO_DIR / post["file"]
-        content = f"""---
-title: "{post['title']}"
----
-
-{{{{< include {post['include_path']} >}}}}
-"""
+        content = f"---\ntitle: \"{post['title']}\"\n---\n\n{{{{< include {post['include_path']} >}}}}\n"
         with open(qmd_path, "w", encoding="utf-8") as f:
             f.write(content)
 
-    # 5. Monta a lista de capítulos
     chapters = ["index.qmd"]
+    if figuras:
+        chapters.append("lof.qmd")
+    if tabelas:
+        chapters.append("lot.qmd")
 
     current_part = None
     for post in posts:
@@ -146,7 +233,6 @@ title: "{post['title']}"
 
     chapters.extend(["referencias.qmd", "glossario.qmd"])
 
-    # 6. Gera o _quarto.yml do livro
     chapters_yaml = ""
     for item in chapters:
         if isinstance(item, dict) and "part" in item:
@@ -163,7 +249,7 @@ title: "{post['title']}"
 
 book:
   title: "Material de Aulas — Turma 2026.1 ADS"
-  subtitle: "Programação Orientada a Objetos"
+  subtitle: "Programacao Orientada a Objetos"
   author: "Leandro Souza"
   date: today
   date-format: "DD/MM/YYYY"
@@ -182,9 +268,9 @@ format:
     papersize: a4
     documentclass: book
     toc: true
-    toc-title: "Sumário"
-    lof: true
-    lot: true
+    toc-title: "Sumario"
+    # lof e lot desabilitados — bug do Quarto+Typst (#14081)
+    # Gerados manualmente pelo generate-book.py
     number-sections: true
     fontsize: 12pt
     margin:
@@ -209,7 +295,7 @@ execute:
     with open(LIVRO_DIR / "_quarto.yml", "w", encoding="utf-8") as f:
         f.write(quarto_yml)
 
-    print(f"[generate-book] {len(posts)} capítulos gerados no livro/")
+    print(f"[generate-book] {len(posts)} capitulos gerados no livro/")
     for p in posts:
         part_info = f" (part: {p['part']})" if p["part"] else ""
         print(f"  - {p['file']}: {p['title']}{part_info}")
