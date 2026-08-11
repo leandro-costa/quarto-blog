@@ -298,6 +298,7 @@ csl: abnt.csl
 
 format:
   typst:
+    template: null
     papersize: a4
     toc: true
     toc-title: "Sumario"
