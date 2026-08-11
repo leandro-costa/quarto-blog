@@ -1,0 +1,27 @@
+#BlueJ class context
+comment0.target=Conta
+comment1.params=numero\ cliente
+comment1.target=Conta(int,\ java.lang.String)
+comment10.params=
+comment10.target=double\ getSaldo()
+comment11.params=obj
+comment11.target=boolean\ equals(java.lang.Object)
+comment12.params=
+comment12.target=java.lang.String\ toString()
+comment2.params=numero\ cliente\ saldo\ limite
+comment2.target=Conta(int,\ java.lang.String,\ double,\ double)
+comment3.params=cliente
+comment3.target=void\ setCliente(java.lang.String)
+comment4.params=quantidade
+comment4.target=boolean\ saca(double)
+comment5.params=quantidade
+comment5.target=void\ deposita(double)
+comment6.params=destino\ valor
+comment6.target=boolean\ transferir(Conta,\ double)
+comment7.params=
+comment7.target=int\ getNumero()
+comment8.params=
+comment8.target=double\ getLimite()
+comment9.params=
+comment9.target=java.lang.String\ getCliente()
+numComments=13

@@ -4,7 +4,7 @@ Gera automaticamente os capítulos do livro a partir dos posts.
 Executado via 'pre-render' no _quarto.yml raiz.
 
 Copia arquivos compartilhados (references.bib, abnt.csl, _extensions)
-para livro/ em vez de usar symlinks.
+e mídia (gifs, diagramas, excalidraw, code) para livro/.
 
 Tambem gera Lista de Figuras (lof) e Lista de Tabelas (lot) manualmente,
 pois o Quarto+Typst tem um bug (issue #14081) onde lof/lot fica vazio.
@@ -48,6 +48,7 @@ def classify_part(categories: list) -> str | None:
 
 
 def copy_shared_files():
+    """Copia arquivos compartilhados da raiz para livro/ (sem symlinks)."""
     src_bib = ROOT_DIR / "references.bib"
     dst_bib = LIVRO_DIR / "references.bib"
     if src_bib.exists():
@@ -69,6 +70,23 @@ def copy_shared_files():
         print(f"[generate-book] Copiado: {src_ext}/ -> {dst_ext}/")
 
 
+def copy_media_to_livro():
+    """Copia arquivos de mídia (gifs, diagramas, excalidraw, code) dos posts para livro/."""
+    media_dirs = ["gifs", "diagramas", "excalidraw", "code"]
+
+    for post_dir in POSTS_DIR.rglob("*"):
+        if not post_dir.is_dir():
+            continue
+        if post_dir.name in media_dirs:
+            rel_path = post_dir.relative_to(POSTS_DIR)
+            dst_path = LIVRO_DIR / rel_path
+
+            if dst_path.exists():
+                shutil.rmtree(dst_path)
+            shutil.copytree(post_dir, dst_path)
+            print(f"[generate-book] Copiado mídia: {post_dir} -> {dst_path}")
+
+
 def extract_floats():
     figuras = []
     tabelas = []
@@ -82,7 +100,7 @@ def extract_floats():
         with open(content_file, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Figuras - padrao chunk: //| label: fig-xxx + //| fig-cap: "..."
+        # Figuras - padrao chunk
         for match in re.finditer(
             r"//\|\s*label:\s*(fig-[\w-]+).*?//\|\s*fig-cap:\s*\"([^\"]+)\"",
             content, re.DOTALL
@@ -93,7 +111,7 @@ def extract_floats():
                 "chapter": chapter_title,
             })
 
-        # Figuras - padrao div: ::: {#fig-xxx}\nCaption\n:::
+        # Figuras - padrao div
         for match in re.finditer(
             r"::: \{#(fig-[\w-]+)\}\n([^\n]+?)\n:::",
             content, re.DOTALL
@@ -104,7 +122,7 @@ def extract_floats():
                 "chapter": chapter_title,
             })
 
-        # Figuras - padrao markdown: ![caption](url){#fig-xxx}
+        # Figuras - padrao markdown
         for match in re.finditer(
             r"!\[([^\]]*)\]\([^)]+\)\{?#(fig-[\w-]+)?\}?",
             content
@@ -117,7 +135,7 @@ def extract_floats():
                     "chapter": chapter_title,
                 })
 
-        # Tabelas - padrao chunk: //| label: tbl-xxx + //| tbl-cap: "..."
+        # Tabelas - padrao chunk
         for match in re.finditer(
             r"//\|\s*label:\s*(tbl-[\w-]+).*?//\|\s*tbl-cap:\s*\"([^\"]+)\"",
             content, re.DOTALL
@@ -128,7 +146,7 @@ def extract_floats():
                 "chapter": chapter_title,
             })
 
-        # Tabelas - padrao div: ::: {#tbl-xxx}\nCaption\n:::
+        # Tabelas - padrao div
         for match in re.finditer(
             r"::: \{#(tbl-[\w-]+)\}\n([^\n]+?)\n:::",
             content, re.DOTALL
@@ -172,6 +190,7 @@ def generate_lof_lot(figuras, tabelas):
 
 def main():
     copy_shared_files()
+    copy_media_to_livro()
 
     figuras, tabelas = extract_floats()
     generate_lof_lot(figuras, tabelas)
@@ -269,8 +288,6 @@ format:
     documentclass: book
     toc: true
     toc-title: "Sumario"
-    # lof e lot desabilitados — bug do Quarto+Typst (#14081)
-    # Gerados manualmente pelo generate-book.py
     number-sections: true
     fontsize: 12pt
     margin:
