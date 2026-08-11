@@ -71,20 +71,34 @@ def copy_shared_files():
 
 
 def copy_media_to_livro():
-    """Copia arquivos de mídia (gifs, diagramas, excalidraw, code) dos posts para livro/."""
+    """Copia arquivos de mídia (gifs, diagramas, excalidraw, code) dos posts para livro/.
+
+    Os caminhos nos _content.qmd usam ./gifs/, ./code/ etc. relativos ao post.
+    Quando incluídos no livro via {{< include >}}, o Typst resolve esses caminhos
+    a partir de livro/. Por isso copiamos para livro/ aplanando a estrutura.
+    """
     media_dirs = ["gifs", "diagramas", "excalidraw", "code"]
 
     for post_dir in POSTS_DIR.rglob("*"):
         if not post_dir.is_dir():
             continue
-        if post_dir.name in media_dirs:
-            rel_path = post_dir.relative_to(POSTS_DIR)
-            dst_path = LIVRO_DIR / rel_path
+        if post_dir.name not in media_dirs:
+            continue
 
-            if dst_path.exists():
-                shutil.rmtree(dst_path)
-            shutil.copytree(post_dir, dst_path)
-            print(f"[generate-book] Copiado mídia: {post_dir} -> {dst_path}")
+        # Copiar arquivos para livro/<media_dir>/ mantendo subdirs
+        for src_file in post_dir.rglob("*"):
+            if not src_file.is_file():
+                continue
+
+            # Caminho relativo dentro do diretório de mídia (ex: code/heranca/Animal.java)
+            rel_in_media = src_file.relative_to(post_dir)
+            dst_file = LIVRO_DIR / post_dir.name / rel_in_media
+
+            os.makedirs(dst_file.parent, exist_ok=True)
+            shutil.copy2(src_file, dst_file)
+            # print(f"[generate-book] Copiado: {src_file} -> {dst_file}")
+
+    print(f"[generate-book] Mídia copiada para livro/ (code/, gifs/, diagramas/, excalidraw/)")
 
 
 def extract_floats():

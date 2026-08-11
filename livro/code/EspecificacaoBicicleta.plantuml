@@ -1,0 +1,24 @@
+```plantuml
+@startuml
+left to right direction
+map "Especificação \nde uma Bicicleta" as Bicicleta{
+  numeroDeBicicletas =>3
+}
+map bicicleta1{
+  id =>1
+  velocidade =>100
+}
+map bicicleta2{
+  id =>2
+  velocidade =>120
+}
+map bicicleta3{
+  id =>3
+  velocidade =>90
+}
+
+Bicicleta --> bicicleta1 : new
+Bicicleta --> bicicleta2 : new
+Bicicleta --> bicicleta3 : new
+@enduml
+```
