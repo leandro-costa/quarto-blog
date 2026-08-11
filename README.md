@@ -82,8 +82,8 @@ cp abnt.csl livro/abnt.csl
 ```
 poo-blog/
 ├── _quarto.yml               # config do site (navbar = Blog/Aulas/Exercícios/Trabalho/Para Entrega)
-├── references.bib             # bibliografia (fonte única — livro/references.bib é um symlink pra cá)
-├── abnt.csl                    # estilo de citação ABNT (fonte única — livro/abnt.csl é um symlink pra cá)
+├── references.bib             # bibliografia (fonte única — copiada para livro/ pelo script)
+├── abnt.csl                    # estilo de citação ABNT (fonte única — copiado para livro/ pelo script)
 ├── index.qmd                    # home / listagem geral do blog
 ├── about.qmd                     # perfil do professor
 ├── categorias/                   # uma página de listing por categoria (equivalente às páginas de categoria do Hope)
@@ -106,8 +106,8 @@ poo-blog/
 │   ├── exercicio-21-generics.qmd
 │   ├── referencias.qmd
 │   ├── glossario.qmd
-│   ├── references.bib               # symlink -> ../references.bib
-│   └── abnt.csl                      # symlink -> ../abnt.csl
+│   ├── references.bib               # copiado da raiz pelo generate-book.py
+│   └── abnt.csl                      # copiado da raiz pelo generate-book.py
 ├── styles.scss                    # customização visual (cor #46bd87, igual ao tema original)
 └── .github/workflows/publish.yml      # build + deploy (GitHub Pages) com JDK/IJava configurados
 ```
@@ -201,7 +201,7 @@ O projeto usa a extensão [pandoc-ext/diagram](https://github.com/pandoc-ext/dia
 (instalada em `_extensions/diagram/`, licença MIT) para renderizar diagramas
 a partir de código, em vez de depender de imagens externas
 (`plantuml.com` etc.). Funciona tanto no site quanto no livro — o livro
-usa a mesma extensão via link simbólico (`livro/_extensions -> ../_extensions`).
+usa a mesma extensão copiada automaticamente pelo `generate-book.py`.
 
 Exemplo de uso em qualquer post:
 

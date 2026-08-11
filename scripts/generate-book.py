@@ -2,13 +2,19 @@
 """
 Gera automaticamente os capítulos do livro a partir dos posts.
 Executado via 'pre-render' no _quarto.yml raiz.
+
+Copia arquivos compartilhados (references.bib, abnt.csl, _extensions)
+para livro/ em vez de usar symlinks — funciona em qualquer SO,
+inclusive Windows sem privilégios especiais.
 """
 import os
 import re
+import shutil
 from pathlib import Path
 
 POSTS_DIR = Path("posts")
 LIVRO_DIR = Path("livro")
+ROOT_DIR = Path(".")
 
 
 def extract_order(name: str) -> int:
@@ -42,8 +48,37 @@ def classify_part(categories: list) -> str | None:
     return None  # sem part = capítulo direto
 
 
+def copy_shared_files():
+    """Copia arquivos compartilhados da raiz para livro/ (sem symlinks)."""
+    # references.bib
+    src_bib = ROOT_DIR / "references.bib"
+    dst_bib = LIVRO_DIR / "references.bib"
+    if src_bib.exists():
+        shutil.copy2(src_bib, dst_bib)
+        print(f"[generate-book] Copiado: {src_bib} -> {dst_bib}")
+
+    # abnt.csl
+    src_csl = ROOT_DIR / "abnt.csl"
+    dst_csl = LIVRO_DIR / "abnt.csl"
+    if src_csl.exists():
+        shutil.copy2(src_csl, dst_csl)
+        print(f"[generate-book] Copiado: {src_csl} -> {dst_csl}")
+
+    # _extensions (diretório)
+    src_ext = ROOT_DIR / "_extensions"
+    dst_ext = LIVRO_DIR / "_extensions"
+    if src_ext.exists():
+        if dst_ext.exists():
+            shutil.rmtree(dst_ext)
+        shutil.copytree(src_ext, dst_ext)
+        print(f"[generate-book] Copiado: {src_ext}/ -> {dst_ext}/")
+
+
 def main():
-    # Encontra todos os posts com _content.qmd
+    # 1. Copia arquivos compartilhados
+    copy_shared_files()
+
+    # 2. Encontra todos os posts com _content.qmd
     posts = []
     for content_file in sorted(POSTS_DIR.rglob("_content.qmd"), key=lambda p: extract_order(p.parent.name)):
         rel_path = content_file.relative_to(POSTS_DIR)
@@ -75,14 +110,14 @@ def main():
             "order": extract_order(post_name),
         })
 
-    # Limpa arquivos .qmd gerados anteriormente no livro/
+    # 3. Limpa arquivos .qmd gerados anteriormente no livro/
     # Mantém apenas arquivos fixos: index.qmd, referencias.qmd, glossario.qmd
     fixed_files = {"index.qmd", "referencias.qmd", "glossario.qmd", "_quarto.yml"}
     for f in LIVRO_DIR.glob("*.qmd"):
         if f.name not in fixed_files:
             f.unlink()
 
-    # Gera os arquivos .qmd do livro
+    # 4. Gera os arquivos .qmd do livro
     for post in posts:
         qmd_path = LIVRO_DIR / post["file"]
         content = f"""---
@@ -94,7 +129,7 @@ title: "{post['title']}"
         with open(qmd_path, "w", encoding="utf-8") as f:
             f.write(content)
 
-    # Monta a lista de capítulos
+    # 5. Monta a lista de capítulos
     chapters = ["index.qmd"]
 
     current_part = None
@@ -111,8 +146,7 @@ title: "{post['title']}"
 
     chapters.extend(["referencias.qmd", "glossario.qmd"])
 
-    # Gera o _quarto.yml do livro
-    # Precisamos preservar o resto da configuração, então usamos um template
+    # 6. Gera o _quarto.yml do livro
     chapters_yaml = ""
     for item in chapters:
         if isinstance(item, dict) and "part" in item:
