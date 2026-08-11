@@ -1,7 +1,4 @@
-<!-- Core + gramáticas carregadas de forma síncrona e explícita (em vez do
-     plugin autoloader, que busca a gramática via rede de forma assíncrona
-     e depende de resolução de caminho que pode falhar silenciosamente).
-     "clike" é pré-requisito da gramática "java" no Prism. -->
+<!-- Core + gramáticas carregadas de forma síncrona e explícita -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
@@ -9,54 +6,133 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 <script>
-  // O Quarto/Pandoc gera algo como:
-  //   <div class="sourceCode" id="cb1">
-  //     <pre class="sourceCode java"><code class="sourceCode java">...</code></pre>
-  //   </div>
-  // A classe de linguagem (ex.: "java") aparece tanto no <pre> quanto no
-  // <code>; lemos do <code> por ser o mais confiável entre os diferentes
-  // jeitos que o Quarto gera blocos (fenced comum vs. célula executada via
-  // Jupyter/IJava). Removemos os <span> de destaque do Pandoc (texto puro)
-  // e adicionamos as classes que o Prism espera (language-xxx) para ele
-  // tokenizar/colorir do zero.
-  (function () {
-    function aplicarPrism() {
-      var blocos = document.querySelectorAll("pre.sourceCode code.sourceCode, pre > code[class*='sourceCode']");
-      blocos.forEach(function (codeEl) {
-        var preEl = codeEl.closest("pre");
-        if (!preEl) return;
+(function () {
+  "use strict";
 
-        var origem = codeEl.className || preEl.className || "";
-        var lang = origem
-          .split(/\s+/)
-          .find(function (c) { return c && c !== "sourceCode"; });
+  function aplicarPrism() {
+    // Seletores abrangentes: cobre tanto blocos Pandoc quanto Jupyter
+    var seletores = [
+      "pre.sourceCode code.sourceCode",
+      "pre.sourceCode > code",
+      "div.sourceCode pre code",
+      "div.cell-code pre code",
+      "pre > code[class*='language-']",
+      "pre > code[class*='sourceCode']",
+      "pre[class*='sourceCode'] > code",
+      // Fallback: qualquer <pre><code> que pareça código
+      "pre > code"
+    ];
 
-        // Remove os <span> de destaque do Pandoc, preservando o texto puro
-        // (inclusive quebras de linha) para o Prism tokenizar do zero.
-        codeEl.textContent = codeEl.textContent;
-
-        if (lang) {
-          codeEl.className = "language-" + lang;
-          preEl.className = "language-" + lang + " line-numbers";
-        } else {
-          // Sem linguagem identificada: ainda assim tira o "sourceCode"
-          // puro pra não ficar sem nenhum estilo do Prism.
-          codeEl.classList.remove("sourceCode");
-          preEl.classList.remove("sourceCode");
-        }
+    var blocos = [];
+    seletores.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        if (blocos.indexOf(el) === -1) blocos.push(el);
       });
+    });
 
-      if (window.Prism) {
-        Prism.highlightAll();
+    if (!blocos.length) {
+      console.log("[Prism] Nenhum bloco de código encontrado.");
+      return;
+    }
+
+    console.log("[Prism] Blocos encontrados:", blocos.length);
+
+    blocos.forEach(function (codeEl) {
+      var preEl = codeEl.closest("pre");
+      if (!preEl) return;
+
+      // Já processado?
+      if (preEl.dataset.prismApplied) return;
+      preEl.dataset.prismApplied = "true";
+
+      // Detectar linguagem
+      var lang = null;
+
+      // 1. Tentar extrair de data-lang (Quarto/Jupyter)
+      if (preEl.dataset.lang) {
+        lang = preEl.dataset.lang;
       }
-    }
+      // 2. Tentar extrair de data-language
+      else if (preEl.dataset.language) {
+        lang = preEl.dataset.language;
+      }
+      // 3. Extrair das classes do <code>
+      else {
+        var codeClasses = (codeEl.className || "").split(/\s+/);
+        var preClasses = (preEl.className || "").split(/\s+/);
+        var allClasses = codeClasses.concat(preClasses);
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", aplicarPrism);
+        for (var i = 0; i < allClasses.length; i++) {
+          var c = allClasses[i].trim();
+          if (!c || c === "sourceCode" || c === "cell-code" || c === "code" || c === "language-") continue;
+          if (c.startsWith("language-")) {
+            lang = c.replace("language-", "");
+            break;
+          }
+          // Classes diretas como "java", "bash", "yaml"
+          if (/^(java|bash|sh|yaml|python|r|js|javascript|json|xml|html|css|sql|cpp|c|go|rust|kotlin|scala|groovy|php|ruby|perl|lua|vim|dockerfile|makefile|markdown|tex|bibtex|diff|regex|http|powershell|batch|shell)$/i.test(c)) {
+            lang = c.toLowerCase();
+            break;
+          }
+        }
+      }
+
+      // Se ainda não achou, tentar pelo id do div pai (ex: cb1 -> java)
+      if (!lang) {
+        var parent = preEl.closest("div[id^='cb']");
+        if (parent) {
+          var sibling = parent.querySelector(".code-label, [data-lang]");
+          if (sibling) {
+            lang = sibling.dataset.lang || sibling.textContent.trim().toLowerCase();
+          }
+        }
+      }
+
+      // Normalizar linguagens
+      if (lang) {
+        lang = lang.toLowerCase();
+        if (lang === "sh") lang = "bash";
+        if (lang === "shell") lang = "bash";
+        if (lang === "yml") lang = "yaml";
+        if (lang === "js") lang = "javascript";
+        if (lang === "py") lang = "python";
+      }
+
+      // Limpar classes antigas do Pandoc/Quarto
+      codeEl.removeAttribute("class");
+      preEl.removeAttribute("class");
+
+      // Aplicar classes do Prism
+      if (lang && Prism.languages[lang]) {
+        codeEl.className = "language-" + lang;
+        preEl.className = "language-" + lang + " line-numbers";
+      } else {
+        codeEl.className = "language-text";
+        preEl.className = "language-text line-numbers";
+        if (lang) console.log("[Prism] Gramática não encontrada para:", lang);
+      }
+
+      // Preservar quebras de linha: o textContent já faz isso,
+      // mas garantimos que não há spans de highlight antigos
+      var texto = codeEl.textContent;
+      codeEl.textContent = texto;
+    });
+
+    // Destacar com Prism
+    if (window.Prism && Prism.highlightAll) {
+      Prism.highlightAll();
+      console.log("[Prism] Highlight aplicado.");
     } else {
-      // O script já está no fim do <body>; se o DOM já estiver pronto,
-      // roda direto em vez de esperar um evento que já passou.
-      aplicarPrism();
+      console.error("[Prism] Prism.highlightAll não disponível!");
     }
-  })();
+  }
+
+  // Executar quando o DOM estiver pronto
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", aplicarPrism);
+  } else {
+    // Já carregou — rodar imediatamente
+    aplicarPrism();
+  }
+})();
 </script>
