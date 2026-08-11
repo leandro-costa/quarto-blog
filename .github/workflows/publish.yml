@@ -18,6 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Configurar Git (desabilitar symlinks)
+        run: git config --global core.symlinks false
+
       - name: Checkout
         uses: actions/checkout@v4
 
