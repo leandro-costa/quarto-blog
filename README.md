@@ -121,8 +121,12 @@ poo-blog/
   compatíveis diretamente, `highlight-style: none` desliga o destaque do
   Pandoc (deixa o texto puro) e `prism-foot.html` remonta as classes que o
   Prism espera (`language-java`, `line-numbers`) antes de chamar
-  `Prism.highlightAll()`. Isso acontece no navegador do leitor, não no
-  build — então funciona sem precisar instalar nada no CI.
+  `Prism.highlightAll()`. As gramáticas (Java, Bash, YAML) são carregadas
+  de forma explícita e síncrona via `<script>` — não usamos o plugin
+  *autoloader* do Prism porque ele busca a gramática via rede de forma
+  assíncrona e depende de resolução automática de caminho, o que se
+  mostrou pouco confiável. Tudo isso acontece no navegador do leitor, não
+  no build — então funciona sem precisar instalar nada no CI.
 - **Saída da execução em estilo terminal**: os blocos `.cell-output-stdout`,
   `.cell-output-stderr` e `.cell-output-error` (onde o Quarto mostra o que
   o código `{java}` imprimiu ao rodar) ganharam fundo escuro, fonte

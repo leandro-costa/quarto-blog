@@ -1,34 +1,62 @@
+<!-- Core + gramáticas carregadas de forma síncrona e explícita (em vez do
+     plugin autoloader, que busca a gramática via rede de forma assíncrona
+     e depende de resolução de caminho que pode falhar silenciosamente).
+     "clike" é pré-requisito da gramática "java" no Prism. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 <script>
   // O Quarto/Pandoc gera algo como:
   //   <div class="sourceCode" id="cb1">
   //     <pre class="sourceCode java"><code class="sourceCode java">...</code></pre>
   //   </div>
-  // A classe de linguagem (ex.: "java") fica no <pre>/<code>, não no <div>
-  // externo — por isso lemos daqui. Removemos os <span> de destaque do
-  // Pandoc (texto puro) e adicionamos as classes que o Prism espera
-  // (language-xxx) para ele tokenizar/colorir do zero.
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("pre.sourceCode > code.sourceCode").forEach(function (codeEl) {
-      var preEl = codeEl.parentElement;
-      var classes = (preEl.className || "").split(/\s+/);
-      var lang = classes.find(function (c) {
-        return c && c !== "sourceCode";
+  // A classe de linguagem (ex.: "java") aparece tanto no <pre> quanto no
+  // <code>; lemos do <code> por ser o mais confiável entre os diferentes
+  // jeitos que o Quarto gera blocos (fenced comum vs. célula executada via
+  // Jupyter/IJava). Removemos os <span> de destaque do Pandoc (texto puro)
+  // e adicionamos as classes que o Prism espera (language-xxx) para ele
+  // tokenizar/colorir do zero.
+  (function () {
+    function aplicarPrism() {
+      var blocos = document.querySelectorAll("pre.sourceCode code.sourceCode, pre > code[class*='sourceCode']");
+      blocos.forEach(function (codeEl) {
+        var preEl = codeEl.closest("pre");
+        if (!preEl) return;
+
+        var origem = codeEl.className || preEl.className || "";
+        var lang = origem
+          .split(/\s+/)
+          .find(function (c) { return c && c !== "sourceCode"; });
+
+        // Remove os <span> de destaque do Pandoc, preservando o texto puro
+        // (inclusive quebras de linha) para o Prism tokenizar do zero.
+        codeEl.textContent = codeEl.textContent;
+
+        if (lang) {
+          codeEl.className = "language-" + lang;
+          preEl.className = "language-" + lang + " line-numbers";
+        } else {
+          // Sem linguagem identificada: ainda assim tira o "sourceCode"
+          // puro pra não ficar sem nenhum estilo do Prism.
+          codeEl.classList.remove("sourceCode");
+          preEl.classList.remove("sourceCode");
+        }
       });
 
-      var plainText = codeEl.textContent;
-      codeEl.textContent = plainText;
-
-      if (lang) {
-        codeEl.className = "language-" + lang;
-        preEl.className = "language-" + lang + " line-numbers";
+      if (window.Prism) {
+        Prism.highlightAll();
       }
-    });
-
-    if (window.Prism) {
-      Prism.highlightAll();
     }
-  });
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", aplicarPrism);
+    } else {
+      // O script já está no fim do <body>; se o DOM já estiver pronto,
+      // roda direto em vez de esperar um evento que já passou.
+      aplicarPrism();
+    }
+  })();
 </script>
