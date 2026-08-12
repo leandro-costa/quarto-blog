@@ -55,7 +55,8 @@ else biometria ou horario invalido
     else
         ServicoAcesso --> TelaAutenticao : Falha na autenticao
 end
-@enduml```
+@enduml
+```
 
 ## Barema de Avaliação (100 pontos)
 | Área | Peso | Critérios |

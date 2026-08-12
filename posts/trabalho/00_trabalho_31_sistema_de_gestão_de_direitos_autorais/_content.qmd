@@ -49,7 +49,8 @@ else licenca inválida ou expirada
     ServicoDireitos --> TelaLicenca : Bloqueio
     TelaLicenca --> Usuario : Exibir aviso
 end
-@enduml```
+@enduml
+```
 
 ## Barema de Avaliação (100 pontos)
 | Área | Peso | Critérios |

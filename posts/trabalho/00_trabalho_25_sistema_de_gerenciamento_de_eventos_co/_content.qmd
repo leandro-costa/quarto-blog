@@ -47,7 +47,8 @@ else regra violada
     ServicoEvento --> TelaEvento : mensagem de erro
     TelaEvento --> Usuario : Exibir alerta de erro
 end
-@enduml```
+@enduml
+```
 
 ## Barema de Avaliação (100 pontos)
 | Área | Peso | Critèrios |
