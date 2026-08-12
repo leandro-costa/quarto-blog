@@ -1,120 +1,25 @@
 project:
-  type: book
+  type: default
   output-dir: _book
 
-book:
-  title: "Material de Aulas — Turma 2026.1 ADS"
-  subtitle: "Programacao Orientada a Objetos"
-  author: "Leandro Souza"
-  date: today
-  date-format: "DD/MM/YYYY"
-  chapters:
-    - index.qmd
-    - lof.qmd
-    - 00_plano_de_curso_de_disciplina_do_ensino_superior.qmd
-    - 00_parcial_1_do_trabalho.qmd
-    - 00_trabalho_01_sistema_de_biblioteca_digital_emprésti.qmd
-    - 00_trabalho_02_sistema_de_controle_de_estoque_cadastr.qmd
-    - 00_trabalho_03_sistema_de_reserva_de_salas_de_aula.qmd
-    - 00_trabalho_04_sistema_de_gerenciamento_de_eventos_in.qmd
-    - 00_trabalho_05_sistema_de_controle_de_vendas_cadastro.qmd
-    - 00_trabalho_06_sistema_de_controle_de_estacionamento.qmd
-    - 00_trabalho_07_sistema_de_controle_de_horas_extras.qmd
-    - 00_trabalho_08_sistema_de_gerenciamento_de_cursos_mat.qmd
-    - 00_trabalho_09_sistema_de_gerenciamento_de_pedidos_re.qmd
-    - 00_trabalho_10_sistema_de_controle_de_acesso_cartões.qmd
-    - 00_trabalho_11_sistema_de_gerenciamento_de_transporte.qmd
-    - 00_trabalho_12_sistema_de_gerenciamento_de_saúde_agen.qmd
-    - 00_trabalho_13_sistema_de_gerenciamento_de_inventário.qmd
-    - 00_trabalho_14_sistema_de_controle_de_produção_ordem.qmd
-    - 00_trabalho_15_sistema_de_gerenciamento_de_viagens_re.qmd
-    - 00_trabalho_16_sistema_de_controle_de_documentos_arqu.qmd
-    - 00_trabalho_17_sistema_de_gerenciamento_de_finanças_d.qmd
-    - 00_trabalho_18_sistema_de_gerenciamento_de_loja_carri.qmd
-    - 00_trabalho_19_sistema_de_gerenciamento_de_atividades.qmd
-    - 00_trabalho_20_sistema_de_gerenciamento_de_hotel_rese.qmd
-    - 00_trabalho_21_sistema_de_gerenciamento_de_transporte.qmd
-    - 00_trabalho_22_sistema_de_gerenciamento_de_cursos_onl.qmd
-    - 00_trabalho_23_sistema_de_gerenciamento_de_atendiment.qmd
-    - 00_trabalho_24_sistema_de_gerenciamento_de_eventos_co.qmd
-    - 00_trabalho_25_sistema_de_gerenciamento_de_eventos_co.qmd
-    - 00_trabalho_26_sistema_de_controle_de_acesso_biométri.qmd
-    - 00_trabalho_27_sistema_de_gerenciamento_de_inventário.qmd
-    - 00_trabalho_28_sistema_de_gerenciamento_de_projetos_t.qmd
-    - 00_trabalho_29_sistema_de_controle_de_qualidade_inspe.qmd
-    - 00_trabalho_30_sistema_de_gerenciamento_de_recursos_h.qmd
-    - 00_trabalho_31_sistema_de_gestão_de_direitos_autorais.qmd
-    - 00_trabalho_32_sistema_de_gestão_de_energia_renovável.qmd
-    - 00_trabalho_33_sistema_de_gestão_de_compras_corporati.qmd
-    - 00_trabalho_33_sistema_de_gestão_de_resíduos_sólidos.qmd
-    - 00_trabalho_35_sistema_de_gestão_de_mudanças_de_peque.qmd
-    - 00_trabalho_36_sistema_de_gestão_de_bens_públicos.qmd
-    - 01_linguagens_e_paradigmas_de_programação.qmd
-    - 01_exercício_java_no_w3c.qmd
-    - 02_programação_orientada_a_objetos.qmd
-    - 02_exercício_fixação_de_sintaxe.qmd
-    - 03_construtor.qmd
-    - 03_exercício_data_oo.qmd
-    - 04_codificando_com_java.qmd
-    - 04_exercício_modelagem_carro.qmd
-    - 05_montando_ambiente_de_trabalho.qmd
-    - 05_exercício_modelagem_tv.qmd
-    - 06_uml.qmd
-    - 06_exercício_area_do_prédio_oo.qmd
-    - 07_associações.qmd
-    - 07_exercício_modelagem_dvd.qmd
-    - 08_encapsulamento.qmd
-    - 08_exercício_modelagem_computador.qmd
-    - 09_exercício_modelagem_dvd_com_encapsulamento.qmd
-    - 10_trabalhando_com_arraylist.qmd
-    - 10_exercício_sistema_de_conta_bancária_com_encapsulam.qmd
-    - 10_exercícios_listas.qmd
-    - 11_separação_em_camadas_e_ferramentas.qmd
-    - 11_hierarquia_militar_simplificada.qmd
-    - 12_javafx_tutoriais.qmd
-    - 12_membros_de_classes.qmd
-    - 13_exercício_de_telas_em_javafx.qmd
-    - 14_heranca.qmd
-    - 14_herança.qmd
-    - 14_estrutura_geral_do_trabalho.qmd
-    - 15_greenfoot.qmd
-    - 15_exercício_de_herança_1.qmd
-    - 16_exercício_de_herança_2.qmd
-    - 17_exercício_herança_3_converter_para_extenso.qmd
-    - 18_polimorfismo.qmd
-    - 18_exercício_de_herança_4_sistema_banco.qmd
-    - 19_classes_abstratas.qmd
-    - 19_exercício_polimorfismo.qmd
-    - 20_interface.qmd
-    - 20_exercício_herança_classes_abstratas_e_interface.qmd
-    - 21_tipificação_forte_e_generics_em_java.qmd
-    - part: "Exercicios"
-      chapters:
-        - 21_Parcial2_generics.qmd
-    - 21_exercício_sistema_biblioteca.qmd
-    - 22_exercício_generics_trabalho_parcial_2.qmd
-    - referencias.qmd
-    - glossario.qmd
-
-filters:
-  - diagram
-
-lang: pt-BR
-bibliography: references.bib
-csl: abnt.csl
-
 format:
-  pdf:
+  typst:
     papersize: a4
     toc: true
     toc-title: "Sumario"
+    toc-depth: 3
     number-sections: true
-    fontsize: 12pt
-    geometry:
-      - left=3cm
-      - top=3cm
-      - right=2cm
-      - bottom=2cm
+    section-numbering: "1."
+    columns: 1
+    margin:
+      left: 3cm
+      top: 3cm
+      right: 2cm
+      bottom: 2cm
+    lang: pt
+
+bibliography: references.bib
+csl: abnt.csl
 
 execute:
   freeze: auto

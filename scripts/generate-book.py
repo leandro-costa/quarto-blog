@@ -277,46 +277,27 @@ def main():
             chapters_yaml += f"    - {item}\n"
 
     quarto_yml = f"""project:
-  type: book
+  type: default
   output-dir: _book
 
-book:
-  title: "Material de Aulas — Turma 2026.1 ADS"
-  subtitle: "Programacao Orientada a Objetos"
-  author: "Leandro Souza"
-  date: today
-  date-format: "DD/MM/YYYY"
-  chapters:
-{chapters_yaml.rstrip()}
-
-filters:
-  - diagram
-
-lang: pt-BR
-bibliography: references.bib
-csl: abnt.csl
-
 format:
-  pdf:
+  typst:
     papersize: a4
     toc: true
     toc-title: "Sumario"
+    toc-depth: 3
     number-sections: true
-    fontsize: 12pt
+    section-numbering: "1."
+    columns: 1
     margin:
       left: 3cm
       top: 3cm
       right: 2cm
       bottom: 2cm
-    include-in-header:
-      text: |
-        #set par(hanging-indent: 0pt)
-        #show heading: it => {{
-          set par(hanging-indent: 0pt)
-          block(it, above: 1.6em, below: 1em)
-        }}
-        #set par(first-line-indent: 1.25cm, leading: 1em, justify: true)
-        #show link: it => underline(text(fill: rgb("#1a56db"), it))
+    lang: pt
+
+bibliography: references.bib
+csl: abnt.csl
 
 execute:
   freeze: auto
