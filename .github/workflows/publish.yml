@@ -67,7 +67,16 @@ jobs:
         run: quarto render livro --to typst
 
       - name: Copiar PDF do livro para dentro do site
-        run: cp livro/_book/*.pdf _site/livro-poo.pdf
+        run: |
+          mkdir -p _site
+          PDF_GERADO=$(find livro/_book -maxdepth 1 -name "*.pdf" | head -n 1)
+          if [ -z "$PDF_GERADO" ]; then
+            echo "Erro: nenhum PDF encontrado em livro/_book/"
+            ls -la livro/_book/ || echo "livro/_book/ não existe"
+            exit 1
+          fi
+          cp "$PDF_GERADO" _site/livro-poo.pdf
+          echo "Copiado: $PDF_GERADO -> _site/livro-poo.pdf"
 
       - name: Upload artefato do Pages
         uses: actions/upload-pages-artifact@v3
