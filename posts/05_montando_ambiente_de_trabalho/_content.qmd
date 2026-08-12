@@ -63,7 +63,7 @@ scoop install main/git
 
 Add java
 
-::: {.callout-note title="@tab scoop"}
+::: {.callout-note title="scoop"}
 ```console
 scoop bucket add java
 scoop install java/temurin-lts-jdk
@@ -80,7 +80,7 @@ brew install --cask temurin@25
 
 Add maven
 
-::: {.callout-note title="@tab scoop"}
+::: {.callout-note title="scoop"}
 ```console
 scoop install main/maven
 ```
@@ -95,7 +95,7 @@ brew install maven
 
 Add Scene Builder
 
-::: {.callout-note title="@tab scoop"}
+::: {.callout-note title="scoop"}
 ```console
 scoop bucket add extras
 scoop install extras/scene-builder

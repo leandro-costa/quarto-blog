@@ -70,7 +70,7 @@ Animal <|-- Passaro
     - Todas as subclasses implementam o método mover
 - O programa envia a mensagem "mover" para os 3 objetos
 
-::: {.callout-note title="@tab for"}
+::: {.callout-note title="tab for"}
 ```java
 //...
 Animal animais[] = new Animal[3];

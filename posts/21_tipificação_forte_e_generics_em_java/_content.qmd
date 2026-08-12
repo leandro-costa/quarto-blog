@@ -10,7 +10,11 @@ Java é uma linguagem de tipificação forte (ou fortemente tipada), o que signi
 
 Por exemplo, você não pode atribuir uma String a uma variável do tipo int:
 
-@[code](./code/generics/01_problema/tiposIncompativeis.java)
+```java
+// tiposIncompativeis.java
+int numero = 10;
+numero = "Texto"; // Erro de compilação: tipos incompatíveis
+```
 
 A tipificação forte evita erros comuns, como tentar acessar métodos ou propriedades que não existem para um determinado tipo, reduzindo bugs e facilitando a depuração.
 
@@ -22,7 +26,39 @@ No entanto, em sistemas dinâmicos onde precisamos reaproveitar estruturas para 
 
 Antes do Java 5, a forma comum de criar coleções ou estruturas reutilizáveis era utilizar a classe base `Object`. Como toda classe em Java herda de `Object`, era possível armazenar qualquer dado.
 
-@[code](./code/generics/01_problema/ExemploObject.java)
+```java
+// ExemploObject.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExemploObject {
+    public static void main(String[] args) {
+        // Lista sem generics (usa Object)
+        List lista = new ArrayList();
+        
+        // Adicionando elementos de tipos diferentes
+        lista.add("Texto"); // String
+        lista.add(10);      // Integer
+        lista.add(3.14);    // Double
+
+        // Recuperando elementos (precisa de cast)
+        String texto = (String) lista.get(0);
+        Integer numero = (Integer) lista.get(1);
+        Double decimal = (Double) lista.get(2);
+
+        System.out.println("Texto: " + texto);
+        System.out.println("Número: " + numero);
+        System.out.println("Decimal: " + decimal);
+
+        // Problema: Erro em tempo de execução se o cast estiver errado
+        try {
+            Integer erro = (Integer) lista.get(0); // ClassCastException
+        } catch (ClassCastException e) {
+            System.out.println("Erro de cast em runtime: " + e.getMessage());
+        }
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 
@@ -73,17 +109,105 @@ Veiculo --> Motor
 
 Ao implementar as classes sem generics:
 
-@[code](./code/generics/01_problema/Motor.java)
-@[code](./code/generics/01_problema/MotorCombustao.java)
-@[code](./code/generics/01_problema/MotorEletrico.java)
-@[code](./code/generics/01_problema/Veiculo.java)
-@[code](./code/generics/01_problema/Carro.java)
+```java
+// Motor.java
+public abstract class Motor {
+    private String tipo;
+
+    public Motor(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+}
+```
+```java
+// MotorCombustao.java
+public class MotorCombustao extends Motor {
+    private int cilindradas;
+
+    public MotorCombustao(int cilindradas) {
+        super("Combustão");
+        this.cilindradas = cilindradas;
+    }
+
+    public int getCilindradas() {
+        return cilindradas;
+    }
+}
+```
+```java
+// MotorEletrico.java
+public class MotorEletrico extends Motor {
+    private int potenciaKW;
+
+    public MotorEletrico(int potenciaKW) {
+        super("Elétrico");
+        this.potenciaKW = potenciaKW;
+    }
+
+    public int getPotenciaKW() {
+        return potenciaKW;
+    }
+}
+```
+```java
+// Veiculo.java
+public abstract class Veiculo {
+    private String modelo;
+    private Motor motor;
+
+    public Veiculo(String modelo, Motor motor) {
+        this.modelo = modelo;
+        this.motor = motor;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public Motor getMotor() {
+        return motor;
+    }
+
+    public abstract void ligar();
+}
+```
+```java
+// Carro.java
+public class Carro extends Veiculo {
+    public Carro(String modelo, MotorCombustao motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Carro " + getModelo() + " está ligado.");
+    }
+}
+```
 
 #### O Dilema do Cast no Retorno:
 
 Mesmo garantindo no construtor de `Carro` que o motor recebido é um `MotorCombustao`, a classe base `Veiculo` define que `getMotor()` retorna `Motor`. 
 
-@[code](./code/generics/01_problema/TestaVeiculos.java)
+```java
+// TestaVeiculos.java
+public class TestaVeiculos {
+    public static void main(String[] args) {
+        Carro carro = new Carro("Sedan", new MotorCombustao(2000));
+
+        // getMotor() retorna Motor. Para acessar métodos específicos, EXIGE CAST!
+        Motor motorGenerico = carro.getMotor();
+        MotorCombustao motorCombustao = (MotorCombustao) motorGenerico; // Cast explícito!
+
+        System.out.println("Modelo: " + carro.getModelo());
+        System.out.println("Cilindradas: " + motorCombustao.getCilindradas());
+    }
+}
+```
 
 Para acessar o método específico `getCilindradas()`, o desenvolvedor é **obrigado a fazer um cast explícito**:
 ```java
@@ -100,7 +224,36 @@ Os **Generics** foram introduzidos no Java 5 para permitir que classes, interfac
 
 Com generics, informamos o tipo desejado entre corchetes angulares `<T>`:
 
-@[code](./code/generics/02_generics_basico/ExemploGenerics.java)
+```java
+// ExemploGenerics.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExemploGenerics {
+    public static void main(String[] args) {
+        // Lista com generics (tipo específico: String)
+        List<String> listaDeStrings = new ArrayList<>();
+        
+        // Adicionando elementos (apenas Strings são permitidas)
+        listaDeStrings.add("Texto 1");
+        listaDeStrings.add("Texto 2");
+        // listaDeStrings.add(10); // Erro de compilação: tipo incompatível
+
+        // Recuperando elementos (sem necessidade de cast)
+        String texto1 = listaDeStrings.get(0);
+        String texto2 = listaDeStrings.get(1);
+
+        System.out.println("Texto 1: " + texto1);
+        System.out.println("Texto 2: " + texto2);
+
+        // Exemplo com classe genérica
+        Caixa<Integer> caixaDeInteiros = new Caixa<>();
+        caixaDeInteiros.setConteudo(42);
+        int valor = caixaDeInteiros.getConteudo(); // Sem cast
+        System.out.println("Valor na caixa: " + valor);
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 
@@ -119,15 +272,86 @@ Com generics, informamos o tipo desejado entre corchetes angulares `<T>`:
 Podemos criar nossas próprias classes parametrizadas usando letras convencionais como `T` (Type), `E` (Element), `K` (Key), `V` (Value), `U`, `V` etc.
 
 #### Exemplo com Parâmetro Único (`Caixa<T>`):
-@[code](./code/generics/02_generics_basico/Caixa.java)
+```java
+// Caixa.java
+public class Caixa<T> {
+    private T conteudo;
+
+    public void setConteudo(T conteudo) {
+        this.conteudo = conteudo;
+    }
+
+    public T getConteudo() {
+        return conteudo;
+    }
+}
+```
 
 #### Exemplo de Teste Genérico Simples:
-@[code](./code/generics/02_generics_basico/GenericsTest.java)
+```java
+// GenericsTest.java
+public class GenericsTest {
+    public static void main(String[] args) {
+        Test<String> test1 = new Test<>("Test String.");
+        test1.showItemDetails();
+
+        Test<Integer> test2 = new Test<>(100);
+        test2.showItemDetails();
+    }
+}
+
+class Test<T> {
+    private T item;
+
+    public Test(T item) {
+        this.item = item;
+    }
+
+    public T getItem() {
+        return item;
+    }
+
+    public void setItem(T item) {
+        this.item = item;
+    }
+
+    public void showItemDetails() {
+        System.out.println("Value of the item: " + item);
+        System.out.println("Type of the item: " + item.getClass().getName());
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 
 #### Exemplo com Múltiplos Parâmetros Genéricos (`Par<T, U>`):
-@[code](./code/generics/02_generics_basico/GenericsTest2.java)
+```java
+// GenericsTest2.java
+public class GenericsTest2 {
+    public static void main(String[] args) {
+        Par<String, Integer> par = new Par<>("Test String.", 100);
+        par.showItemDetails();
+    }
+}
+
+class Par<T, U> {
+    private T itemT;
+    private U itemU;
+
+    public Par(T itemT, U itemU) {
+        this.itemT = itemT;
+        this.itemU = itemU;
+    }
+
+    public T getItemT() { return itemT; }
+    public U getItemU() { return itemU; }
+
+    public void showItemDetails() {
+        System.out.println("Value of itemT: " + itemT + " (Type: " + itemT.getClass().getName() + ")");
+        System.out.println("Value of itemU: " + itemU + " (Type: " + itemU.getClass().getName() + ")");
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 
@@ -137,9 +361,54 @@ Podemos criar nossas próprias classes parametrizadas usando letras convencionai
 
 Ao tornar a classe base `Veiculo` genérica parametrizando o motor com `<T>`, resolvemos o problema do cast:
 
-@[code](./code/generics/02_generics_basico/Veiculo.java)
-@[code](./code/generics/02_generics_basico/Carro.java)
-@[code](./code/generics/02_generics_basico/TestaVeiculos.java)
+```java
+// Veiculo.java
+public abstract class Veiculo<T> {
+    private String modelo;
+    private T motor;
+
+    public Veiculo(String modelo, T motor) {
+        this.modelo = modelo;
+        this.motor = motor;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public T getMotor() {
+        return motor;
+    }
+
+    public abstract void ligar();
+}
+```
+```java
+// Carro.java
+public class Carro extends Veiculo<MotorCombustao> {
+    public Carro(String modelo, MotorCombustao motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Carro " + getModelo() + " está ligado.");
+    }
+}
+```
+```java
+// TestaVeiculos.java
+public class TestaVeiculos {
+    public static void main(String[] args) {
+        Carro carro = new Carro("Sedan", new MotorCombustao(2000));
+
+        // getMotor() retorna MotorCombustao DIRETO! Sem necessidade de Cast!
+        MotorCombustao motor = carro.getMotor();
+        System.out.println("Modelo: " + carro.getModelo());
+        System.out.println("Cilindradas: " + motor.getCilindradas());
+    }
+}
+```
 
 ::: {.callout-tip title="Vitória do Generics"}
 Ao chamar `carro.getMotor()`, o método retorna diretamente o tipo `MotorCombustao`. Não é necessário fazer nenhum cast!
@@ -155,11 +424,37 @@ No exemplo anterior (`Veiculo<T>`), o tipo `T` está totalmente aberto. O compil
 
 O que impede alguém de definir uma classe `Geladeira` e tentar criar um `Veiculo<Geladeira>`?
 
-@[code](./code/generics/03_bounded_types/Geladeira.java)
+```java
+// Geladeira.java
+public class Geladeira {
+    private int capacidadeLitros;
+
+    public Geladeira(int capacidadeLitros) {
+        this.capacidadeLitros = capacidadeLitros;
+    }
+
+    public int getCapacidadeLitros() {
+        return capacidadeLitros;
+    }
+}
+```
 
 Ou criar uma motocicleta cujo motor é um `Integer`?
 
-@[code](./code/generics/03_bounded_types/Pop.java)
+```java
+// Pop.java
+// Erro de compilação: Integer não herda de Motor!
+public class Pop extends Veiculo<Integer> {
+    public Pop(String modelo, Integer motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Pop " + getModelo() + " está ligada.");
+    }
+}
+```
 
 Uma geladeira ou um número inteiro **não são motores**! Precisamos restringir o tipo genérico `T` para garantir a integridade do domínio.
 
@@ -212,13 +507,94 @@ Veiculo --> Motor
 
 #### Implementação com Bounds:
 
-@[code](./code/generics/03_bounded_types/Veiculo.java)
-@[code](./code/generics/03_bounded_types/Carro.java)
-@[code](./code/generics/03_bounded_types/Moto.java)
-@[code](./code/generics/03_bounded_types/Caminhao.java)
+```java
+// Veiculo.java
+public abstract class Veiculo<T extends Motor> {
+    private String modelo;
+    private T motor;
+
+    public Veiculo(String modelo, T motor) {
+        this.modelo = modelo;
+        this.motor = motor;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public T getMotor() {
+        return motor;
+    }
+
+    public abstract void ligar();
+}
+```
+```java
+// Carro.java
+public class Carro extends Veiculo<MotorCombustao> {
+    public Carro(String modelo, MotorCombustao motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Carro " + getModelo() + " está ligado.");
+    }
+}
+```
+```java
+// Moto.java
+public class Moto extends Veiculo<MotorCombustao> {
+    public Moto(String modelo, MotorCombustao motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Moto " + getModelo() + " está ligada.");
+    }
+}
+```
+```java
+// Caminhao.java
+public class Caminhao extends Veiculo<MotorEletrico> {
+    public Caminhao(String modelo, MotorEletrico motor) {
+        super(modelo, motor);
+    }
+
+    @Override
+    public void ligar() {
+        IO.println("Caminhão " + getModelo() + " está ligado.");
+    }
+}
+```
 
 #### Testando a Hierarquia Tipada:
-@[code](./code/generics/03_bounded_types/TestaVeiculos.java)
+```java
+// TestaVeiculos.java
+public class TestaVeiculos {
+    public static void main(String[] args) {
+        // Criando motores
+        MotorCombustao motorCarro = new MotorCombustao(2000);
+        MotorCombustao motorMoto = new MotorCombustao(600);
+        MotorEletrico motorCaminhao = new MotorEletrico(300);
+
+        // Criando veículos
+        Carro carro = new Carro("Sedan", motorCarro);
+        Moto moto = new Moto("Esportiva", motorMoto);
+        Caminhao caminhao = new Caminhao("Carga Pesada", motorCaminhao);
+
+        // Acesso direto ao tipo específico sem necessidade de cast!
+        IO.println("Cilindradas do Carro: " + carro.getMotor().getCilindradas());
+        IO.println("Cilindradas da Moto: " + moto.getMotor().getCilindradas());
+        IO.println("Potência do Caminhão: " + caminhao.getMotor().getPotenciaKW() + " kW");
+
+        carro.ligar();
+        moto.ligar();
+        caminhao.ligar();
+    }
+}
+```
 
 ```console
 Cilindradas do Carro: 2000
@@ -239,11 +615,81 @@ Com a restrição `T extends Motor`, a tentativa de declarar `class Pop extends 
 
 Bounded types também funcionam com **interfaces**. Abaixo, garantimos que a `CalculadoraArea` só aceita tipos que implementem a interface `FormaGeometrica`:
 
-@[code](./code/generics/03_bounded_types/FormaGeometrica.java)
-@[code](./code/generics/03_bounded_types/Circulo.java)
-@[code](./code/generics/03_bounded_types/Retangulo.java)
-@[code](./code/generics/03_bounded_types/CalculadoraArea.java)
-@[code](./code/generics/03_bounded_types/TestaCalculadoraArea.java)
+```java
+// FormaGeometrica.java
+public interface FormaGeometrica {
+    double calcularArea();
+}
+```
+```java
+// Circulo.java
+public class Circulo implements FormaGeometrica {
+    private double raio;
+
+    public Circulo(double raio) {
+        this.raio = raio;
+    }
+
+    @Override
+    public double calcularArea() {
+        return Math.PI * raio * raio;
+    }
+}
+```
+```java
+// Retangulo.java
+public class Retangulo implements FormaGeometrica {
+    private double largura;
+    private double altura;
+
+    public Retangulo(double largura, double altura) {
+        this.largura = largura;
+        this.altura = altura;
+    }
+
+    @Override
+    public double calcularArea() {
+        return largura * altura;
+    }
+}
+```
+```java
+// CalculadoraArea.java
+import java.util.List;
+
+public class CalculadoraArea {
+
+    // O método aceita uma lista de QUALQUER tipo, desde que implemente FormaGeometrica
+    public double calcularAreaTotal(List<? extends FormaGeometrica> formas) {
+        return formas.stream()
+                .mapToDouble(FormaGeometrica::calcularArea)
+                .sum();
+    }
+}
+```
+```java
+// TestaCalculadoraArea.java
+import java.util.List;
+
+public class TestaCalculadoraArea {
+    public static void main(String[] args) {
+        // Criando formas geométricas variadas
+        Circulo circulo = new Circulo(5.0);
+        Retangulo retangulo = new Retangulo(4.0, 6.0);
+
+        // Criando uma lista que aceita qualquer FormaGeometrica
+        List<FormaGeometrica> listaDeFormas = new ArrayList<>();
+        listaDeFormas.add(circulo);
+        listaDeFormas.add(retangulo);
+
+        // Calculadora processa a lista mista
+        CalculadoraArea calculadora = new CalculadoraArea();
+        double areaTotal = calculadora.calcularAreaTotal(listaDeFormas);
+
+        System.out.println("Área Total (Círculo + Retângulo): " + areaTotal);
+    }
+}
+```
 
 ```console
 Área do círculo: 78.53981633974483
@@ -263,7 +709,34 @@ Se tentarmos criar uma `CalculadoraArea<String>`, o compilador impedirá a execu
 
 Além de classes genéricas, é possível declarar **métodos genéricos** em classes normais. A assinatura do método inclui o tipo parametrizado antes do tipo de retorno:
 
-@[code](./code/generics/04_avancado/MetodosGenericosExemplo.java)
+```java
+// MetodosGenericosExemplo.java
+public class MetodosGenericosExemplo {
+
+    // Método genérico para imprimir elementos de qualquer tipo de array
+    public static <E> void imprimirArray(E[] array) {
+        for (E elemento : array) {
+            System.out.print(elemento + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Integer[] numeros = { 1, 2, 3, 4, 5 };
+        String[] nomes = { "Ana", "Bia", "Carlos" };
+        Double[] decimais = { 1.5, 2.5, 3.5 };
+
+        System.out.print("Array de Inteiros: ");
+        imprimirArray(numeros);
+
+        System.out.print("Array de Strings: ");
+        imprimirArray(nomes);
+
+        System.out.print("Array de Decimais: ");
+        imprimirArray(decimais);
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 
@@ -328,7 +801,52 @@ Formulado por Joshua Bloch (*Effective Java*), o princípio **PECS** define qual
 
 #### 4.2.4 Exemplo Prático em Código:
 
-@[code](./code/generics/04_avancado/WildcardPECSExemplo.java)
+```java
+// WildcardPECSExemplo.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class WildcardPECSExemplo {
+
+    // PRODUCER EXTENDS: apenas leitura da lista
+    public static double somarAreas(List<? extends FormaGeometrica> formas) {
+        double total = 0;
+        for (FormaGeometrica f : formas) {
+            total += f.calcularArea();
+        }
+        return total;
+    }
+
+    // CONSUMER SUPER: apenas adição/escrita na lista
+    public static void adicionarCirculo(List<? super Circulo> lista, double raio) {
+        lista.add(new Circulo(raio));
+    }
+
+    public static void main(String[] args) {
+        List<Circulo> circulos = new ArrayList<>();
+        circulos.add(new Circulo(2.0));
+        circulos.add(new Circulo(3.0));
+
+        // Producer Extends em ação: aceita List<Circulo> em parâmetro List<? extends FormaGeometrica>
+        System.out.println("Soma das áreas: " + somarAreas(circulos));
+
+        // Consumer Super em ação
+        List<Object> objetos = new ArrayList<>();
+        adicionarCirculo(objetos, 4.0);
+        System.out.println("Círculo adicionado em lista genérica com sucesso.");
+    }
+
+    interface FormaGeometrica {
+        double calcularArea();
+    }
+
+    static class Circulo implements FormaGeometrica {
+        private double raio;
+        public Circulo(double raio) { this.raio = raio; }
+        @Override public double calcularArea() { return Math.PI * raio * raio; }
+    }
+}
+```
 
 <codapi-snippet sandbox="java" editor="basic"></codapi-snippet>
 

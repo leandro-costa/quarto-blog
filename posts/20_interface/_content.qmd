@@ -191,14 +191,62 @@ interface Usuario
 Agora, conseguimos definir o que o método autentica() deve receber como parâmetro para trabalhar tanto com gerentes quanto com empresas. Ele deve receber um parâmetro do tipo Usuario.
 
 
-@[code](./code/abstract/Usuario.java)
-@[code](./code/abstract/Cliente.java)
-@[code](./code/abstract/PessoaFisica.java)
-@[code](./code/abstract/PessoaJuridica.java)
-@[code](./code/abstract/Funcionario.java)
-@[code](./code/abstract/Gerente.java)
-@[code](./code/abstract/Seguranca.java)
-@[code](./code/abstract/AutenticadorDeUsuario.java)
+```java
+// Usuario.java
+public interface Usuario {
+    boolean autenticar();    
+}
+```
+```java
+// Cliente.java
+public class Cliente {
+    //...    
+}
+```
+```java
+// PessoaFisica.java
+public class PessoaFisica extends Cliente {
+    //...
+}
+```
+```java
+// PessoaJuridica.java
+public class PessoaJuridica extends Cliente implements Usuario {
+    //...    
+    public boolean autenticar(){
+        return true;
+    }   
+}
+```
+```java
+// Funcionario.java
+public class Funcionario {
+    //...
+}
+```
+```java
+// Gerente.java
+public class Gerente extends Funcionario implements Usuario {
+    //...
+    public boolean autenticar(){
+        return true;
+    }       
+}
+```
+```java
+// Seguranca.java
+public class Seguranca extends Funcionario {
+    //...
+}
+```
+```java
+// AutenticadorDeUsuario.java
+public class AutenticadorDeUsuario {
+    public boolean autentica ( Usuario u ) {
+        // implementação
+    }
+}
+```
 
 
 ### Mais sobre herança e interface

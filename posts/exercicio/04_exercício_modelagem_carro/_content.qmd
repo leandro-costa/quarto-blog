@@ -25,8 +25,92 @@
 [Entrega](https://classroom.github.com/a/BWtGEgyy)
 
 
-::: {.callout-note title="@[code](../code/exercicioCarro/Carro.java)" collapse="true"}
-@[code](../code/exercicioCarro/Main.java)
+::: {.callout-note title="Código: Carro.java" collapse="true"}
+```java
+// Carro.java
+class Carro {
+    String modelo;
+    int velocidade;
+    int aceleracao;
+    int marcha;
+    boolean ligado;
+
+    Carro(String modelo) {
+        this.modelo = modelo;
+        ligado = false;
+        velocidade = 0;
+        marcha = 0;
+    }
+
+    boolean ligar() {
+        if (!ligado) {
+            ligado = true;
+        }
+        return ligado;
+    }
+
+    boolean desligar() {
+        if (ligado) {
+            ligado = false;
+        }
+        return ligado;
+    }
+
+    int acelerar() {
+        if (ligado) {
+            velocidade+=marcha;
+        }
+        return velocidade;
+    }
+
+    int desacelerar() {
+        if (velocidade > 0) {
+            velocidade--;
+        }
+        return velocidade;
+    }
+
+    String virarDireita(){
+        return "Direita";
+    }
+
+    String virarEsquerda(){
+        return "Esquerda";
+    }
+    
+    int marchaCima(){
+        if(marcha < 6){
+            marcha++;
+        }
+        return marcha;
+    }
+
+    int marchaAbaixo(){
+        if(marcha > -1){
+            marcha--;
+        }
+        return marcha;
+    }
+
+}
+```
+```java
+// Main.java
+void main() {
+    Carro c1 = new Carro("Uno");
+    System.out.println("Velocidade:"+c1.acelerar());
+    System.out.println(c1.ligar());
+    System.out.println("Velocidade:"+c1.acelerar());
+    System.out.println("Marcha:"+c1.marchaCima());
+    System.out.println("Velocidade:"+c1.acelerar());
+    System.out.println("Velocidade:"+c1.acelerar());
+    System.out.println("Marcha:"+c1.marchaCima());  
+    System.out.println("Velocidade:"+c1.acelerar());
+    System.out.println("Velocidade:"+c1.acelerar()); 
+    System.out.println("Velocidade:"+c1.desacelerar());
+    System.out.println("Velocidade:"+c1.desacelerar());
+}
+```
 ```
 :::
 

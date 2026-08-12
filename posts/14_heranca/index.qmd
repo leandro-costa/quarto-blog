@@ -1,10 +1,9 @@
 ---
-title: "Herança"
-author: "Leandro Souza"
-date: "2026-07-20"
-categories: [aula, heranca]
-description: "Herança, sobrescrita de métodos, construtores em hierarquias e classes seladas em Java"
-image: cover.png
+title: Herança
+date: 2026-07-20 18:30:00-03:00
+categories:
+  - aula
+  - heranca
+order: 14
+author: Leandro Souza
 ---
-
-{{< include _content.qmd >}}

@@ -44,13 +44,155 @@ adapitado de [^Takenami]
     }
     ```
 
-::: {.callout-note title="@[code](../code/exercicioPolimorfismo/Operacao.java)" collapse="true"}
-@[code](../code/exercicioPolimorfismo/Credito.java)
-@[code](../code/exercicioPolimorfismo/Debito.java)
-@[code](../code/exercicioPolimorfismo/Conta.java)
-@[code](../code/exercicioPolimorfismo/Correntista.java)
-@[code](../code/exercicioPolimorfismo/Banco.java)
-@[code](../code/exercicioPolimorfismo/TestaConta.java)
+::: {.callout-note title="Código: Operacao.java" collapse="true"}
+```java
+// Operacao.java
+public abstract class Operacao {
+    private double valor;
+
+    public Operacao(double valor) {
+        this.valor = valor;
+    }
+
+    public abstract double operar();
+
+    protected double getValor() {
+        return valor;
+    }
+}
+```
+```java
+// Credito.java
+public class Credito extends Operacao {
+
+    public Credito(double valor) {
+        super(valor);
+    }
+    @Override
+    public double operar() {
+        return getValor();
+    }    
+}
+```
+```java
+// Debito.java
+public class Debito extends Operacao {
+
+    public Debito(double valor) {
+        super(valor);        
+    }
+
+    @Override
+    public double operar() {
+        return getValor()*-1;
+    }    
+}
+```
+```java
+// Conta.java
+class Conta{
+    private double saldo;
+
+    public Conta() {
+        saldo = 0;
+    }
+
+    public void executarOperacao(Operacao opr){
+        saldo+=opr.operar();
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+}
+```
+```java
+// Correntista.java
+public class Correntista {
+    private String nome;
+    private Conta conta;
+
+    public Correntista(String nome) {
+        this.nome = nome;
+        this.conta = new Conta();
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+}
+```
+```java
+// Banco.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Banco {
+    private List<Correntista> correntistas;
+
+
+    public Banco() {
+        this.correntistas = new ArrayList();
+    }
+
+    public void addCorrentista(String nome){
+        correntistas.add(new Correntista(nome));
+    }
+
+    public Correntista getCorrentista(String nome) {
+        for (Correntista correntista : correntistas) {
+            if (correntista.getNome().equals(nome)) {
+                return correntista;
+            }
+        }
+        return null;
+    }
+
+    public void debitar(String nomeCorrentista, double valor) {
+        Debito d = new Debito(valor);
+        getCorrentista(nomeCorrentista).getConta().executarOperacao(d);
+    }
+
+    public void creditar(String nomeCorrentista, double valor) {
+        Credito c = new Credito(valor);
+        getCorrentista(nomeCorrentista).getConta().executarOperacao(c);
+    }
+
+    public double getSaldo(String nomeCorrentista) {
+        return getCorrentista(nomeCorrentista).getConta().getSaldo();
+    }
+
+    public void transferir(String nomeCorrentistaOrigem, String nomeCorrentistaDestino, double valor) {
+        debitar(nomeCorrentistaOrigem, valor);
+        creditar(nomeCorrentistaDestino, valor);
+    }
+}
+```
+```java
+// TestaConta.java
+public class TestaConta {
+    public static void main(String[] args) {
+        Banco itau = new Banco();
+        String nomeCorrentista1 = "Leandro";
+        itau.addCorrentista(nomeCorrentista1);
+        System.out.println("Saldo da conta de "+nomeCorrentista1+" :"+itau.getSaldo(nomeCorrentista1));
+        itau.creditar(nomeCorrentista1, 500);
+        System.out.println("Saldo da conta de "+nomeCorrentista1+" :"+itau.getSaldo(nomeCorrentista1));
+        itau.debitar(nomeCorrentista1, 400);
+        System.out.println("Saldo da conta de "+nomeCorrentista1+" :"+itau.getSaldo(nomeCorrentista1));
+        String nomeCorrentista2 = "Leo";
+        itau.addCorrentista(nomeCorrentista2);
+        System.out.println("Saldo da conta de "+nomeCorrentista2+" :"+itau.getSaldo(nomeCorrentista2));
+        itau.transferir(nomeCorrentista1, nomeCorrentista2, 300);
+        System.out.println("Saldo da conta de "+nomeCorrentista1+" :"+itau.getSaldo(nomeCorrentista1));
+        System.out.println("Saldo da conta de "+nomeCorrentista2+" :"+itau.getSaldo(nomeCorrentista2));
+    }
+}
+```
 ::: 
 
 
