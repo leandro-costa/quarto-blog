@@ -81,7 +81,7 @@ for(int i = 0; i < 3 ; i++){
 }
 //...
 ```
-@tab Foreach
+**Tab:** Foreach
 
 ```java
 List<Animal> animais = List.of(new Peixe(), new Anfibio(), new Passaro());

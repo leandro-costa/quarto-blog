@@ -70,7 +70,7 @@ scoop install java/temurin-lts-jdk
 ```
 
 
-@tab brew 
+**Tab:** brew 
 
 ```console
 brew install --cask temurin@25
@@ -86,7 +86,7 @@ scoop install main/maven
 ```
 
 
-@tab brew 
+**Tab:** brew 
 
 ```console
 brew install maven
@@ -102,7 +102,7 @@ scoop install extras/scene-builder
 ```
 
 
-@tab brew 
+**Tab:** brew 
 
 ```console
 brew install --cask scenebuilder
