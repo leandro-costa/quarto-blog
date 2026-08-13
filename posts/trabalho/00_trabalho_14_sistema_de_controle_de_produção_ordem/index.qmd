@@ -1,4 +1,0 @@
----
-title: Trabalho 14 – Sistema de Controle de Produção – Ordem de Fabricação
-author: Leandro Souza
----

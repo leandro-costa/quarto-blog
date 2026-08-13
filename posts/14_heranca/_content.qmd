@@ -1,6 +1,6 @@
 # Herança
 
-[^Takenami]
+@takenami2011
 
 
 
@@ -123,12 +123,12 @@ label "altura\npeso\nmamar()" #aliceblue;text:blue
 </figure>
 
 
- ## Outros exemplos
+## Outros exemplos
 
 
 ### Caelum 
 
-[^caelumoo]
+@caelum2015
 
 Como toda empresa, nosso Banco possui funcionários. Vamos modelar a classe `Funcionario`:
 
@@ -154,11 +154,11 @@ class Funcionario {
 Além de um funcionário comum, há também outros cargos, como os gerentes. Os gerentes guardam a mesma informação que um funcionário comum, mas possuem outras informações, além de ter funcionalidades um pouco diferentes. Um gerente no nosso banco possui também uma senha numérica que permite o acesso ao sistema interno do banco, além do número de funcionários que ele gerencia:
 
 
-```java{2-4}
+```{.java source-line-numbers="2-4"}
 class Gerente {
-    private String nome;
-    private String cpf;
-    private double salario;
+    private String nome; #<<
+    private String cpf; #<<
+    private double salario; #<<
     private int senha;
     private int numeroDeFuncionariosGerenciados;
     public boolean autentica(int senha) {
@@ -301,7 +301,7 @@ Gerente <|-- Diretor
 
 ### K19
 
-[^k19oo]
+@k192013
 
 #### Reutilização de Código
 Um banco oferece diversos serviços que podem ser contratados individualmente pelos clientes. Quando um serviço é contratado, o sistema do banco deve registrar quem foi o cliente que contratou o serviço, quem foi o funcionário responsável pelo atendimento ao cliente e a data de contratação.
@@ -498,7 +498,7 @@ label "contratante\nresponsavel\ndataDeContratacao" #aliceblue;text:blue
 
 ### Caelum
 
-[^caelumoo]
+@caelum2015
 
 Todo fim de ano, os funcionários do nosso banco recebem uma bonificação. Os funcionários comuns recebem 10% do valor do salário e os gerentes, 15%.
 
@@ -593,7 +593,7 @@ Essa é uma prática comum, pois muitos casos o método reescrito geralmente faz
 
 ### K19
 
-[^k19oo]
+@k192013
 
 Suponha que o valor da taxa administrativa do serviço de empréstimo é diferente dos outros serviços, pois ele é calculado a partir do valor emprestado ao cliente. Como esta lógica é específica para o serviço de empréstimo, devemos acrescentar um método para implementar esse cálculo na classe `Emprestimo`.
 ```java

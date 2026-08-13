@@ -1,4 +1,0 @@
----
-title: Trabalho 17 – Sistema de Gerenciamento de Finanças – Despesas e Receitas
-author: Leandro Souza
----

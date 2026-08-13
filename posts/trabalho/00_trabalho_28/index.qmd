@@ -1,0 +1,5 @@
+---
+title: Trabalho 28 – Sistema de Gerenciamento de Projetos – Tarefas e Sprints
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

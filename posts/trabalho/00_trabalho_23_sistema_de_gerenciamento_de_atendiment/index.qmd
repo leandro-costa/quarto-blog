@@ -1,4 +1,0 @@
----
-title: Trabalho 23 – Sistema de Gerenciamento de Atendimentos – Chamados e Suporte
-author: Leandro Souza
----

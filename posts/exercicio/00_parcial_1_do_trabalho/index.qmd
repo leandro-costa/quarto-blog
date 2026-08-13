@@ -6,3 +6,4 @@ categories:
   - entrega
 author: Leandro Souza
 ---
+{{< include _content.qmd >}}

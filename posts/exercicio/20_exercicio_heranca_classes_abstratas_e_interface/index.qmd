@@ -1,0 +1,12 @@
+---
+title: Exercício Herança classes Abstratas e Interface
+date: 2026-08-03 18:40:00-03:00
+categories:
+  - exercicio
+  - heranca
+  - abstratas
+  - interface
+order: 20
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

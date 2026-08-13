@@ -1,4 +1,0 @@
----
-title: Trabalho 22 – Sistema de Gerenciamento de Cursos Online – Inscrição e Progresso
-author: Leandro Souza
----

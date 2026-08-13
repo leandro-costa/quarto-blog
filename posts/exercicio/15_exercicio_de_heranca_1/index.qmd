@@ -1,0 +1,10 @@
+---
+title: Exercício de Herança 1
+date: 2026-07-27 18:40:00-03:00
+categories:
+  - exercicio
+  - heranca
+order: 15
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

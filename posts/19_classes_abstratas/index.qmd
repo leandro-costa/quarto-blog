@@ -8,3 +8,4 @@ categories:
 order: 19
 author: Leandro Souza
 ---
+{{< include _content.qmd >}}

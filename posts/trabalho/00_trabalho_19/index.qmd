@@ -1,0 +1,5 @@
+---
+title: Trabalho 19 – Sistema de Gerenciamento de Atividades Esportivas – Inscrição e Resultados
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

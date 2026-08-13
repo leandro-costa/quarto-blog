@@ -1,9 +1,0 @@
----
-title: Separação em Camadas e ferramentas
-date: 2026-05-26 18:40:00-03:00
-categories:
-  - aula
-  - camadas
-order: 11
-author: Leandro Souza
----

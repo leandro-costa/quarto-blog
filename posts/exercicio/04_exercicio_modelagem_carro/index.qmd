@@ -1,0 +1,11 @@
+---
+title: "Exercício: Modelagem Carro"
+date: 2026-05-04 18:10:00-03:00
+categories:
+  - exercicio
+  - entrega
+  - java
+order: 4
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

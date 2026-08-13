@@ -1,0 +1,10 @@
+---
+title: "Exercício: Area do Prédio OO"
+date: 2026-05-11 18:15:00-03:00
+categories:
+  - exercicio
+  - java
+order: 6
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

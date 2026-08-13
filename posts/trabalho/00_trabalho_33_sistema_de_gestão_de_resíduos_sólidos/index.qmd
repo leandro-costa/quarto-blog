@@ -1,4 +1,0 @@
----
-title: Trabalho 33 – Sistema de Gestão de Resíduos Sólidos
-author: Leandro Souza
----

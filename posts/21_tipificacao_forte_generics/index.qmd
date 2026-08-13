@@ -1,0 +1,11 @@
+---
+title: Tipificação Forte e Generics em Java
+date: 2026-08-03 19:20:00-03:00
+categories:
+  - aula
+  - heranca
+  - generics
+order: 21
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

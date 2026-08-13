@@ -1,0 +1,5 @@
+---
+title: Trabalho 13 – Sistema de Gerenciamento de Inventário de TI – Equipamentos
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

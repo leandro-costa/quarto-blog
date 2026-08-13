@@ -1,8 +1,0 @@
-# Prefácio {.unnumbered}
-
-Este livro reúne o material de aulas da disciplina de Programação Orientada a
-Objetos (ADS), turma 2026.1, IFBA Campus Santo Antônio de Jesus.
-
-O conteúdo é gerado automaticamente a partir dos mesmos arquivos publicados no
-blog da disciplina — qualquer atualização feita em uma aula do blog é
-refletida aqui na próxima compilação do livro.

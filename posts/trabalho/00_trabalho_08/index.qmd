@@ -1,0 +1,5 @@
+---
+title: Trabalho 08 – Sistema de Gerenciamento de Cursos (Matrícula de Alunos)
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

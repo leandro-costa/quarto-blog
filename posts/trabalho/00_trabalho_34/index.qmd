@@ -1,0 +1,5 @@
+---
+title: Trabalho 34 – Sistema de Gestão de Resíduos Sólidos
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

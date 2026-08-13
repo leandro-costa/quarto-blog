@@ -1,4 +1,0 @@
----
-title: Trabalho 25 – Sistema de Gerenciamento de Eventos Corporativos – Agenda e Convites
-author: Leandro Souza
----

@@ -1,0 +1,5 @@
+---
+title: Trabalho 36 – Sistema de Gestão de Bens Públicos
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

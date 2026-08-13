@@ -1,0 +1,5 @@
+---
+title: Trabalho 05 – Sistema de Controle de Vendas (Cadastro de Produtos e Vendas)
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

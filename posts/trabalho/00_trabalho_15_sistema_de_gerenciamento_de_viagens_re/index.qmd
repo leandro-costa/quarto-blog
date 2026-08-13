@@ -1,4 +1,0 @@
----
-title: Trabalho 15 – Sistema de Gerenciamento de Viagens – Reserva de Passagens
-author: Leandro Souza
----

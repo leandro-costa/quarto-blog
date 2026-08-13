@@ -1,4 +1,0 @@
----
-title: Trabalho 12 – Sistema de Gerenciamento de Saúde – Agendamento de Consultas
-author: Leandro Souza
----

@@ -1,4 +1,0 @@
----
-title: Trabalho 21 – Sistema de Gerenciamento de Transporte Público – Bilhetagem
-author: Leandro Souza
----

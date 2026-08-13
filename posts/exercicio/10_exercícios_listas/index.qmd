@@ -1,9 +1,0 @@
----
-title: Exercícios Listas
-date: 2026-05-25 19:10:00-03:00
-categories:
-  - exercicio
-  - java
-order: 10
-author: Leandro Souza
----

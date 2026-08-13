@@ -1,0 +1,10 @@
+---
+title: "Exercício: Modelagem DVD com encapsulamento"
+date: 2026-05-18 19:20:00-03:00
+categories:
+  - exercicio
+  - java
+order: 9
+author: Leandro Souza
+---
+{{< include _content.qmd >}}

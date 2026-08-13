@@ -203,6 +203,9 @@ def generate_lof_lot(figuras, tabelas):
 
 
 def main():
+    if not LIVRO_DIR.exists():
+        LIVRO_DIR.mkdir(parents=True)
+        print(f"[generate-book] Criado diretório: {LIVRO_DIR}")
     copy_shared_files()
     copy_media_to_livro()
 
@@ -308,7 +311,7 @@ execute:
 
     print(f"[generate-book] {len(posts)} capitulos gerados no livro/")
     for p in posts:
-        part_info = f" (part: {p['part']})" if p["part"] else ""
+        part_info = f" (part: {p['part']})" if p['part'] else ""
         print(f"  - {p['file']}: {p['title']}{part_info}")
 
 
